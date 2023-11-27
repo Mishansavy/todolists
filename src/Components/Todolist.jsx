@@ -4,58 +4,53 @@ import axios from "axios";
 
 export default function Todolist() {
   const [activity, setActivity] = useState("");
-  const [listData, setlistData] = useState([]);
-  const [editIndex, setEditIndex] = useState(-1);
+  const [listData, setListData] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
 
   function addActivity() {
     if (activity.trim() !== "") {
-      setlistData((listData) => {
-        const newlist = [...listData, activity];
-        setActivity("");
-        return newlist;
-      });
+      axios
+        .post("http://localhost:8000/api/todoitems/", { description: activity })
+        .then((response) => {
+          setListData([...listData, response.data]);
+          setActivity("");
+        })
+        .catch((error) => console.error("Error adding todo item: ", error));
     }
-    //save todo item to the API
-    axios
-      .post("/api/todoitems/", { description: activity })
-      .then((response) => {
-        setlistData([...listData, response.data]);
-        setActivity("");
-      })
-      .catch((error) => console.error("error adding todo item: ", error));
   }
 
   function removeActivity(i) {
-    const newlistdata = listData.filter((elem, id) => i !== id);
-    setlistData(newlistdata);
+    const newListData = listData.filter((elem, id) => i !== id);
+    setListData(newListData);
   }
 
   function editActivity(i) {
-    setEditIndex(i);
-    setEditedText(listData[i]);
+    setEditingIndex(i);
+    setEditedText(listData[i].description);
   }
 
-  function saveEdit(i) {
+  function saveEdit() {
     if (editedText.trim() !== "") {
-      const savelistdata = listData.map((item, index) =>
-        i === index ? editedText : item
+      const saveListData = listData.map((item, index) =>
+        editingIndex === index ? { ...item, description: editedText } : item
       );
-      setlistData(savelistdata);
-      setEditIndex(-1);
+      setListData(saveListData);
+      setEditingIndex(-1);
     }
   }
 
-  function removeall() {
-    setlistData([]);
+  function removeAll() {
+    setListData([]);
   }
+
   useEffect(() => {
-    //fetch todo items from the API when the components mounts
     axios
-      .get("/api/todoitems")
-      .then((response) => setlistData(response.data))
-      .catch((error) => console.error("error fetching todo items: ", error));
+      .get("http://localhost:8000/api/todoitems/")
+      .then((response) => setListData(response.data))
+      .catch((error) => console.error("Error fetching todo items: ", error));
   }, []);
+
   return (
     <div className="container">
       <div className="header">To-Do List</div>
@@ -69,38 +64,37 @@ export default function Todolist() {
         Add List
       </button>
       <div className="listHeading">Your List</div>
-      {listData.map((data, i) => {
-        return (
-          <div key={data}>
-            {editIndex === i ? (
-              <>
-                <input
-                  type="text"
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                />
-                <button className="save" onClick={() => saveEdit(i)}>
-                  Save
+      {listData.map((data, i) => (
+        <div key={i}>
+          {editingIndex === i ? (
+            <>
+              <input
+                type="text"
+                value={editedText}
+                onChange={(e) => setEditedText(e.target.value)}
+                placeholder="Edit your item..."
+              />
+              <button className="save" onClick={saveEdit}>
+                Save
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="list-data">{data.description}</div>
+              <div className="list-btn">
+                <button className="btn" onClick={() => removeActivity(i)}>
+                  Remove
                 </button>
-              </>
-            ) : (
-              <>
-                <div className="list-data">{data}</div>
-                <div className="list-btn">
-                  <button className="btn" onClick={() => removeActivity(i)}>
-                    Remove
-                  </button>
-                  <button className="btn" onClick={() => editActivity(i)}>
-                    Edit
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        );
-      })}
+                <button className="btn" onClick={() => editActivity(i)}>
+                  Edit
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      ))}
       {listData.length > 0 && (
-        <button className="removeall" onClick={removeall}>
+        <button className="removeall" onClick={removeAll}>
           Remove All
         </button>
       )}
