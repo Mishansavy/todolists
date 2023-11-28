@@ -21,8 +21,17 @@ export default function Todolist() {
   }
 
   function removeActivity(i) {
-    const newListData = listData.filter((elem, id) => i !== id);
-    setListData(newListData);
+    const itemToDelete = listData[i];
+
+    axios
+      .delete(`http://localhost:8000/api/todoitems/${itemToDelete.id}/`)
+      .then((response) => {
+        const newListData = listData.filter(
+          (item) => item.id !== itemToDelete.id
+        );
+        setListData(newListData);
+      })
+      .catch((error) => console.error("Error deleting todo item: ", error));
   }
 
   function editActivity(i) {
@@ -32,17 +41,28 @@ export default function Todolist() {
 
   function saveEdit() {
     if (editedText.trim() !== "") {
-      const saveListData = listData.map((item, index) =>
-        editingIndex === index ? { ...item, description: editedText } : item
-      );
-      setListData(saveListData);
-      setEditingIndex(-1);
+      const itemToEdit = listData[editingIndex];
+      const updatedItem = { ...itemToEdit, description: editedText };
+
+      axios
+        .put(
+          `http://localhost:8000/api/todoitems/${itemToEdit.id}/`,
+          updatedItem
+        )
+        .then((response) => {
+          const updatedListData = listData.map((item) =>
+            item.id === itemToEdit.id ? response.data : item
+          );
+          setListData(updatedListData);
+          setEditingIndex(-1);
+        })
+        .catch((error) => console.error("Error editing todo item: ", error));
     }
   }
 
-  function removeAll() {
-    setListData([]);
-  }
+  // function removeAll() {
+  //   setListData([]);
+  // }
 
   useEffect(() => {
     axios
@@ -93,11 +113,11 @@ export default function Todolist() {
           )}
         </div>
       ))}
-      {listData.length > 0 && (
+      {/* {listData.length > 0 && (
         <button className="removeall" onClick={removeAll}>
           Remove All
         </button>
-      )}
+      )} */}
     </div>
   );
 }
