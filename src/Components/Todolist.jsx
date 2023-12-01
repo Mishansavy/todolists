@@ -10,7 +10,6 @@ export default function Todolist() {
   const handlekeypress = (e) => {
     if (e.key === "Enter") {
       addActivity();
-      console.log("successfully added");
     }
   };
   function addActivity() {
