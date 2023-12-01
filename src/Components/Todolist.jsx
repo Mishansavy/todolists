@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./todolist.css";
 import axios from "axios";
+import moment from "moment";
 
 export default function Todolist() {
   const [activity, setActivity] = useState("");
@@ -19,6 +20,7 @@ export default function Todolist() {
         .then((response) => {
           setListData([...listData, response.data]);
           setActivity("");
+          console.log(response.data);
         })
         .catch((error) => console.error("Error adding todo item: ", error));
     }
@@ -26,7 +28,6 @@ export default function Todolist() {
 
   function removeActivity(i) {
     const itemToDelete = listData[i];
-
     axios
       .delete(`http://localhost:8000/api/todoitems/${itemToDelete.id}/`)
       .then((response) => {
@@ -74,6 +75,7 @@ export default function Todolist() {
       .then((response) => setListData(response.data))
       .catch((error) => console.error("Error fetching todo items: ", error));
   }, []);
+  console.log(listData);
 
   return (
     <div className="container">
@@ -116,6 +118,9 @@ export default function Todolist() {
           ) : (
             <>
               <div className="list-data">{data.description}</div>
+              <div className="list-time">
+                {moment(data?.created_at).format("YYYY-MM-DD")}
+              </div>
               <div className="list-btn">
                 <button className="btn" onClick={() => removeActivity(i)}>
                   Remove
