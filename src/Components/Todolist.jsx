@@ -7,7 +7,12 @@ export default function Todolist() {
   const [listData, setListData] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
-
+  const handlekeypress = (e) => {
+    if (e.key === "Enter") {
+      addActivity();
+      console.log("successfully added");
+    }
+  };
   function addActivity() {
     if (activity.trim() !== "") {
       axios
@@ -79,13 +84,24 @@ export default function Todolist() {
         placeholder="Add List"
         value={activity}
         onChange={(e) => setActivity(e.target.value)}
+        onKeyPress={handlekeypress}
       />
+
       <button className="addlist" onClick={addActivity}>
         Add List
       </button>
       <div className="listHeading">Your List</div>
       {listData.map((data, i) => (
-        <div key={i}>
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            margin: "10px",
+            gap: "20px",
+            width: "auto",
+            alignItems: "center",
+          }}
+        >
           {editingIndex === i ? (
             <>
               <input
