@@ -5,9 +5,9 @@
 /.pnp
 .pnp.js
 /env
-
+db.sqlite3
 # testing
-/coverage
+/coverage 
 
 # production
 /build
