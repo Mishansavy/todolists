@@ -1,0 +1,69 @@
+body {
+  background-color: #fff6f6;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.container {
+  width: 100%;
+  height: 90vh;
+  padding: 20px;
+}
+.header {
+  font-size: 20px;
+  font-weight: bold;
+  color: #aedefc;
+}
+.listHeading {
+  color: #aedefc;
+  font-weight: 600;
+  font-size: 20px;
+}
+.list-data {
+  background-color: #ffdfdf;
+  padding: 20px;
+  border-radius: 12px;
+}
+input[type="text"] {
+  padding: 12px;
+  border: 1px solid #ffdfdf;
+}
+input[type="text"]:focus {
+  outline: #f895aa;
+}
+.addlist {
+  background-color: #aedefc;
+  margin: 10px 10px;
+  color: #fff;
+}
+.btn {
+  background-color: #aedefc;
+  /* outline: none; */
+  color: #fff;
+  border-color: #dfccfb;
+
+  margin: 10px 10px 10px 0px;
+}
+.btn,
+.removeall,
+.addlist,
+.save {
+  padding: 9px 10px;
+  border-radius: 11px;
+  border: none;
+}
+.list-data {
+  width: 218px;
+}
+
+.save {
+  background-color: #aedefc;
+  /* outline: none; */
+  color: #fff;
+  border-color: #dfccfb;
+  margin: 10px 10px;
+}
+
+.removeall {
+  color: #fff8c9;
+  background-color: #ff3636;
+  border-color: #ff3636;
+}
