@@ -75,7 +75,6 @@ export default function Todolist() {
       .then((response) => setListData(response.data))
       .catch((error) => console.error("Error fetching todo items: ", error));
   }, []);
-  console.log(listData);
 
   return (
     <div className="container">
