@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./todolist.css";
 import axios from "axios";
 import moment from "moment";
-
 export default function Todolist() {
+  const navigate = useNavigate();
   const [activity, setActivity] = useState("");
   const [listData, setListData] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
@@ -20,7 +21,7 @@ export default function Todolist() {
         .then((response) => {
           setListData([...listData, response.data]);
           setActivity("");
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch((error) => console.error("Error adding todo item: ", error));
     }
@@ -89,6 +90,9 @@ export default function Todolist() {
 
       <button className="addlist" onClick={addActivity}>
         Add List
+      </button>
+      <button className="loginbtn" onClick={() => navigate("/login")}>
+        Log In
       </button>
       <div className="listHeading">Your List</div>
       {listData.map((data, i) => (
