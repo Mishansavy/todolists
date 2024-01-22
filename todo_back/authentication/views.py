@@ -131,7 +131,13 @@ class UserLogin(APIView):
         users = authenticate(request, username=username, password=password)
         if users:
             login(request, users)
-            return Response({"result": "logged in"}, status=status.HTTP_200_OK)
+            
+            data = {
+                "user_id" : request.user.id,
+                "user_name" : request.user.username
+            }
+            print(data)
+            return Response({"result": "logged in", "user_data":data}, status=status.HTTP_200_OK)
         else:
             return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
         # user = CustomUser.objects.filter(username=username).first()  

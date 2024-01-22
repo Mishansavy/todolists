@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./todolist.css";
 import axios from "axios";
 import moment from "moment";
-
+import { useNavigate } from "react-router";
 export default function Todolist() {
+  // passing user data after logging in
+  const userData = location.state?.userData;
   const [activity, setActivity] = useState("");
   const [listData, setListData] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
+  //navigations
+  const navigate = useNavigate();
+  const Login = () => {
+    navigate("/todolists/login");
+  };
+
   const handlekeypress = (e) => {
     if (e.key === "Enter") {
       addActivity();
@@ -90,7 +98,21 @@ export default function Todolist() {
       <button className="addlist" onClick={addActivity}>
         Add List
       </button>
+      <button className="addlist" onClick={Login}>
+        Login
+      </button>
       <div className="listHeading">Your List</div>
+      {/* testing the login user data  */}
+      <div>
+        <h2>welcome</h2>
+        {userData &&
+          isLoggedIn(
+            <div>
+              <p>user id: {userData.user_id}</p>
+              <p>username : {userData.user_name}</p>
+            </div>
+          )}
+      </div>
       {listData.map((data, i) => (
         <div
           key={i}
