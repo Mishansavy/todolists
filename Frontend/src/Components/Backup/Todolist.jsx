@@ -9,8 +9,7 @@ export default function Todolist() {
   const [listData, setListData] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
-  //checking and showing the data of logged in user only
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //checking and showing the data of the
   // passing user data after logging in and adding uselocation
 
   const location = useLocation();
@@ -103,6 +102,16 @@ export default function Todolist() {
     }
   }
 
+  // function removeAll() {
+  //   setListData([]);
+  // }
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8000/api/todoitems/")
+  //     .then((response) => setListData(response.data))
+  //     .catch((error) => console.error("Error fetching todo items: ", error));
+  // }, []);
   useEffect(() => {
     if (userData) {
       // user data description field
@@ -128,13 +137,10 @@ export default function Todolist() {
   return (
     <div className="container">
       <div className="header">To-Do List</div>
-      {/* login user data  */}
+      {/* testing the login user data  */}
       <div>
         {userData ? (
-          <h2 className="header">
-            welcome <h2 />
-            <h1 style={{ color: "red" }}>{userData.user_name}</h1>
-          </h2>
+          <h2 className="header">welcome {userData.user_name}</h2>
         ) : (
           <p>No user data available</p>
         )}
@@ -146,6 +152,7 @@ export default function Todolist() {
         onChange={(e) => setActivity(e.target.value)}
         onKeyPress={handlekeypress}
       />
+
       <button className="addlist" onClick={addActivity}>
         Add List
       </button>
@@ -166,51 +173,53 @@ export default function Todolist() {
         Logout
       </button>
       <div className="listHeading">Your List</div>
-      {setIsLoggedIn &&
-        userData &&
-        listData.map((data, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              margin: "10px",
-              gap: "20px",
-              width: "auto",
-              alignItems: "center",
-            }}
-          >
-            {console.log(data)}
-            {editingIndex === i ? (
-              <>
-                <input
-                  type="text"
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                  placeholder="Edit your item..."
-                />
-                <button className="save" onClick={saveEdit}>
-                  Save
+
+      {listData.map((data, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            margin: "10px",
+            gap: "20px",
+            width: "auto",
+            alignItems: "center",
+          }}
+        >
+          {editingIndex === i ? (
+            <>
+              <input
+                type="text"
+                value={editedText}
+                onChange={(e) => setEditedText(e.target.value)}
+                placeholder="Edit your item..."
+              />
+              <button className="save" onClick={saveEdit}>
+                Save
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="list-data">{data.description}</div>
+              <div className="list-time">
+                {moment(data?.created_at).format("YYYY-MM-DD")}
+              </div>
+              <div className="list-btn">
+                <button className="btn" onClick={() => removeActivity(i)}>
+                  Remove
                 </button>
-              </>
-            ) : (
-              <>
-                <div className="list-data">{data.description}</div>
-                <div className="list-time">
-                  {moment(data?.created_at).format("YYYY-MM-DD")}
-                </div>
-                <div className="list-time">{data.created_by}</div>
-                <div className="list-btn">
-                  <button className="btn" onClick={() => removeActivity(i)}>
-                    Remove
-                  </button>
-                  <button className="btn" onClick={() => editActivity(i)}>
-                    Edit
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                <button className="btn" onClick={() => editActivity(i)}>
+                  Edit
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      ))}
+      {/* {listData.length > 0 && (
+        <button className="removeall" onClick={removeAll}>
+          Remove All
+        </button>
+      )} */}
     </div>
   );
 }
