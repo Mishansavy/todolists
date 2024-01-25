@@ -1,48 +1,3 @@
-# from django.shortcuts import render
-
-# # Create your views here.
-# # todolist/views.py
-# from rest_framework import viewsets
-# from .models import TodoItem
-# from .serializers import TodoItemSerializer
-# from rest_framework.response import Response
-# from rest_framework import status
-# from django.http import Http404, HttpResponse
-# from django.contrib.auth import authenticate, login, logout
-# from rest_framework.views import APIView
-# from django.contrib.auth.hashers import make_password
-# from django.contrib import auth
-# from rest_framework.authtoken.models import Token
-# from rest_framework.authentication import TokenAuthentication
-# from django.contrib.auth import get_user_model
-# from authentication.views import *
-# from backend.models import *
-# User = get_user_model()
-# class TodoItemViewSet(viewsets.ModelViewSet):
-#     queryset = TodoItem.objects.all()
-#     serializer_class = TodoItemSerializer
-#     # authentication_classes = [TokenAuthentication]
-#     # permission_classes = [IsAuthenticated]
-#     def create(self, request):
-#         user = request.user.id
-#         print("user_id: ", user)
-#         serializer = self.get_serializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({"message":"Data saved"}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response({"error":"Bad request"}, status=status.HTTP_400_BAD_REQUEST)
-
-#     def list(self, request):
-#         user_id=request.user.id
-#         print("id: ", user_id)
-#         queryset = TodoItem.objects.filter(created_by=user_id)
-#         # queryset = self.filter_queryset(self.get_queryset())
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-#test changes
-# todolist/views.py
 from django.contrib.auth.models import User
 from .serializers import *
 from rest_framework.views import APIView
@@ -50,26 +5,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate,login, logout
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import BasePermission, AllowAny
+from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
 from authentication.serializers import *
 
 User = get_user_model()
-# backend/views.py
-from rest_framework import viewsets
-from .serializers import TodoItemSerializer
-from .models import TodoItem
-
-class TodoItemViewSet(viewsets.ModelViewSet):
-    queryset = TodoItem.objects.all()
-    serializer_class = TodoItemSerializer
 
 class CustomResponse():
-    def successResponseToken(self, code, refresh, access, msg, data=dict()):
+    def successResponseToken(self,code,refresh, access, msg, data=dict()):
         context = {
             "status_code": code,
             "message": msg,
@@ -78,20 +25,20 @@ class CustomResponse():
         }
         return context
     
-    def successResponse(self, code, msg, navigation=dict()):
+    def successResponse(self, code, msg,navigation=dict()):
         context = {
             "status_code": code,
             "message": msg,
-            "navigation": navigation,
+            "navigation":navigation,
             "error": []
         }
         return context
     
-    def successResponseData(self, code, msg, data=dict()):
+    def successResponseData(self, code, msg,data=dict()):
         context = {
             "status_code": code,
             "message": msg,
-            "data": data,
+            "data":data,
             "error": []
         }
         return context
@@ -107,10 +54,10 @@ class CustomResponse():
 
 class UserCreate(APIView):
     # authentication_classes = [TokenAuthentication]
-    # permission_classes = [TokenAuthentication]  # You can add custom permission classes here if needed
+    # permission_classes = [IsAuthenticated]
     def get(self, request):
         print("Users: ", request.user)
-        response = CustomResponse()
+        response=CustomResponse()
         user = CustomUser.objects.all()
         if not user:
             return Response(response.errorResponse(404, "No User found"), status=status.HTTP_404_NOT_FOUND)
@@ -128,15 +75,16 @@ class UserCreate(APIView):
             return Response(response.successResponse(200, "User has been created Succesfully!", serializer.data), status=status.HTTP_200_OK)
         print(serializer.errors)
         return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
-
+    
 class UserAPIIDView(APIView):
     # authentication_classes = [TokenAuthentication]
-    # permission_classes = [TokenAuthentication]  # You can add custom permission classes here if needed
+    # permission_classes = [IsAuthenticated]
     def get_object(self, id):
         try:
             user = CustomUser.objects.get(id=id)
             return user
-        except CustomUser.DoesNotExist:
+        except:
+            CustomUser.DoesNotExist
             return None
         
     def get(self, request, id):
@@ -148,7 +96,8 @@ class UserAPIIDView(APIView):
         serializer = UserRegistrationSerializer(instance)
         return Response(response.successResponse(200, "User List", serializer.data), status=status.HTTP_200_OK)
 
-    def put(self, request, id):
+            
+    def put (self, request, id):
         user = request.user
         if not user.is_superuser:
             return Response(response.errorResponse(401, "You are not authorized for this action"), status=status.HTTP_401_UNAUTHORIZED)
@@ -161,7 +110,7 @@ class UserAPIIDView(APIView):
             serializer.save()
             return Response(response.successResponse(200, "User Details Updated Successfully", serializer.data), status=status.HTTP_200_OK)
         return Response(response.errorResponse(400, "Bad Request"), status=status.HTTP_400_BAD_REQUEST)
-
+    
     def delete(self, request, id):
         user = request.user
         if not user.is_superuser:
@@ -171,9 +120,26 @@ class UserAPIIDView(APIView):
         if not instance:
             return Response(response.errorResponse(404, "Nothing Found"), status=status.HTTP_404_NOT_FOUND)
         instance.delete()
-        return Response(response.successResponse(200, "User Deleted Successfully"), status=status.HTTP_200_OK)
-
+        return Response(response.successResponse(200, "User Deleted Successfully"),status=status.HTTP_200_OK)
+    
 class UserLogin(APIView):
+    # def post(self, request):
+    #     response = CustomResponse()
+    #     username = request.data.get('username')
+    #     password = request.data.get('password')
+
+    #     users = authenticate(request, username=username, password=password)
+    #     if users:
+    #         login(request, users)
+            
+    #         data = {
+    #             "user_id" : request.user.id,
+    #             "user_name" : request.user.username,
+    #         }
+    #         print(data)
+    #         return Response({"result": "logged in", "user_data":data}, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
     def post(self, request):
         response = CustomResponse()
         username = request.data.get('username')
@@ -181,17 +147,32 @@ class UserLogin(APIView):
 
         users = authenticate(request, username=username, password=password)
         if users:
-            login(request, users)
-            
-            data = {
-                "user_id" : request.user.id,
-                "user_name" : request.user.username,
-            }
-            print(data)
-            return Response({"result": "logged in", "user_data": data}, status=status.HTTP_200_OK)
+            # Use the authenticated user instance, not request.user
+            authenticated_user = users
+            serializer = UserRegistrationSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(created_by=authenticated_user)
+                data = {
+                    "user_id": authenticated_user.id,
+                    "user_name": authenticated_user.username,
+                }
+                return Response({"result": "logged in", "user_data": data}, status=status.HTTP_200_OK)
+            print(serializer.errors)
+            return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
 
+        # user = CustomUser.objects.filter(username=username).first()  
+        
+        # if not user:
+        #     return Response(response.errorResponse(404, "User not Found"), status=status.HTTP_404_NOT_FOUND)
+
+        # if check_password(password, user.password):
+        #     token,_  = Token.objects.get_or_create(user=user)
+        #     return Response(response.successResponse(200, "Logged in Successfully", {"token": token.key}), status=status.HTTP_200_OK)
+        # else:
+        #     return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
+         
 class LogOut(APIView):
     def get(self, request):
         print("user: ", request.user)

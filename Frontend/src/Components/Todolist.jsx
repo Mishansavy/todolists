@@ -11,8 +11,8 @@ export default function Todolist() {
   const [editedText, setEditedText] = useState("");
   //checking and showing the data of logged in user only
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // passing user data after logging in and adding uselocation
 
+  // passing user data after logging in and adding uselocation
   const location = useLocation();
   const userData = location.state?.userData;
 
@@ -54,11 +54,13 @@ export default function Todolist() {
       axios
         .post("http://localhost:8000/api/todoitems/", {
           description: activity,
+          created_by: userData.user_name,
         })
         .then((response) => {
           setListData([...listData, response.data]);
           setActivity("");
           console.log(response.data);
+          <div>{response.message}</div>;
         })
         .catch((error) => console.error("Error adding todo item: ", error));
     }
@@ -103,6 +105,29 @@ export default function Todolist() {
     }
   }
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (userData) {
+  //         //fetch and set user-specific data based on user id
+  //         const userResponse = await axios.get(
+  //           `http://localhost:8000/accounts/register/user/${userData.user_id}`
+  //         );
+  //         setUserDescription(userResponse.data.description);
+  //         setIsLoggedIn(true);
+  //       }
+  //       //fetch and set list data
+  //       const listResponse = await axios.get(
+  //         "http://localhost:8000/api/todoitems/"
+  //       );
+  //       setListData(listResponse.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [userData]);
+  //testing
   useEffect(() => {
     if (userData) {
       // user data description field
@@ -131,9 +156,8 @@ export default function Todolist() {
       {/* login user data  */}
       <div>
         {userData ? (
-          <h2 className="header">
-            welcome <h2 />
-            <h1 style={{ color: "red" }}>{userData.user_name}</h1>
+          <h2 className="header" style={{ color: "red" }}>
+            welcome {userData.user_name} id {userData.user_id}
           </h2>
         ) : (
           <p>No user data available</p>
@@ -166,51 +190,55 @@ export default function Todolist() {
         Logout
       </button>
       <div className="listHeading">Your List</div>
-      {setIsLoggedIn &&
-        userData &&
-        listData.map((data, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              margin: "10px",
-              gap: "20px",
-              width: "auto",
-              alignItems: "center",
-            }}
-          >
-            {console.log(data)}
-            {editingIndex === i ? (
-              <>
-                <input
-                  type="text"
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                  placeholder="Edit your item..."
-                />
-                <button className="save" onClick={saveEdit}>
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="list-data">{data.description}</div>
-                <div className="list-time">
-                  {moment(data?.created_at).format("YYYY-MM-DD")}
-                </div>
-                <div className="list-time">{data.created_by}</div>
-                <div className="list-btn">
-                  <button className="btn" onClick={() => removeActivity(i)}>
-                    Remove
+      {userData &&
+        userData.user_id &&
+        // listData.map((data, i) => (
+        listData
+          .filter((data) => data.created_by === userData.user_name)
+          .map((filteredData, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                margin: "10px",
+                gap: "20px",
+                width: "auto",
+                alignItems: "center",
+              }}
+            >
+              {/* {console.log("userData: ", userData)} */}
+              {console.log("Data: ", filteredData)}
+              {editingIndex === i ? (
+                <>
+                  <input
+                    type="text"
+                    value={editedText}
+                    onChange={(e) => setEditedText(e.target.value)}
+                    placeholder="Edit your item..."
+                  />
+                  <button className="save" onClick={saveEdit}>
+                    Save
                   </button>
-                  <button className="btn" onClick={() => editActivity(i)}>
-                    Edit
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                </>
+              ) : (
+                <>
+                  <div className="list-data">{filteredData.description}</div>
+                  <div className="list-time">
+                    {moment(filteredData?.created_at).format("YYYY-MM-DD")}
+                  </div>
+                  <div className="list-time">{filteredData.created_by}</div>
+                  <div className="list-btn">
+                    <button className="btn" onClick={() => removeActivity(i)}>
+                      Remove
+                    </button>
+                    <button className="btn" onClick={() => editActivity(i)}>
+                      Edit
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
     </div>
   );
 }

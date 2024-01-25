@@ -51,6 +51,10 @@ const Login = () => {
       <br />
       <input
         type="password"
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+        }}
         placeholder="enter your password"
         onChange={(e) => setPassword(e.target.value)}
       />{" "}

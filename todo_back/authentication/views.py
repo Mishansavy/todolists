@@ -134,7 +134,7 @@ class UserLogin(APIView):
             
             data = {
                 "user_id" : request.user.id,
-                "user_name" : request.user.username
+                "user_name" : request.user.username,
             }
             print(data)
             return Response({"result": "logged in", "user_data":data}, status=status.HTTP_200_OK)
