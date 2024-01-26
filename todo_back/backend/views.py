@@ -1,47 +1,3 @@
-# from django.shortcuts import render
-
-# # Create your views here.
-# # todolist/views.py
-# from rest_framework import viewsets
-# from .models import TodoItem
-# from .serializers import TodoItemSerializer
-# from rest_framework.response import Response
-# from rest_framework import status
-# from django.http import Http404, HttpResponse
-# from django.contrib.auth import authenticate, login, logout
-# from rest_framework.views import APIView
-# from django.contrib.auth.hashers import make_password
-# from django.contrib import auth
-# from rest_framework.authtoken.models import Token
-# from rest_framework.authentication import TokenAuthentication
-# from django.contrib.auth import get_user_model
-# from authentication.views import *
-# from backend.models import *
-# User = get_user_model()
-# class TodoItemViewSet(viewsets.ModelViewSet):
-#     queryset = TodoItem.objects.all()
-#     serializer_class = TodoItemSerializer
-#     # authentication_classes = [TokenAuthentication]
-#     # permission_classes = [IsAuthenticated]
-#     def create(self, request):
-#         user = request.user.id
-#         print("user_id: ", user)
-#         serializer = self.get_serializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({"message":"Data saved"}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response({"error":"Bad request"}, status=status.HTTP_400_BAD_REQUEST)
-
-#     def list(self, request):
-#         user_id=request.user.id
-#         print("id: ", user_id)
-#         queryset = TodoItem.objects.filter(created_by=user_id)
-#         # queryset = self.filter_queryset(self.get_queryset())
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-#test changes
 # todolist/views.py
 from django.contrib.auth.models import User
 from .serializers import *
@@ -64,9 +20,87 @@ from rest_framework import viewsets
 from .serializers import TodoItemSerializer
 from .models import TodoItem
 
-class TodoItemViewSet(viewsets.ModelViewSet):
-    queryset = TodoItem.objects.all()
-    serializer_class = TodoItemSerializer
+# class TodoItemViewSet(viewsets.ModelViewSet):
+#     queryset = TodoItem.objects.all()
+#     serializer_class = TodoItemSerializer
+class TodoItems(APIView) :
+    def get_object(self, id):
+        try:
+            user = CustomUser.objects.get(id=id)
+            return user
+        except CustomUser.DoesNotExist:
+            return None
+        
+    def get(self, request, id):
+        response = CustomResponse()
+        instance = self.get_object(id)
+        if not instance:
+            return Response(response.errorResponse(404, "Nothing Found"), status=status.HTTP_404_NOT_FOUND)
+        todo_list = TodoItem.objects.filter(created_by=instance)
+        serializer = TodoItemSerializer(todo_list,many=True)
+        return Response(response.successResponse(200, "User List", serializer.data), status=status.HTTP_200_OK)
+
+    def post(self, request):
+        response = CustomResponse()
+        
+        data = {
+            "created_by":request.data.get("created_by"),
+            "description":request.data.get("description")
+        }
+        serializer = TodoItemSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response(response.successResponse(200, "Todo has been created Succesfully!", serializer.data), status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+    
+
+    
+class todoitemsDelete(APIView):
+    def get_object(self, id):
+        try:
+            user = TodoItem.objects.get(id=id)
+            return user
+        except TodoItem.DoesNotExist:
+            return None
+        
+    def get(self, request):
+        response = CustomResponse()
+        # instance = self.get_object(id)
+        # if not instance:
+        #     return Response(response.errorResponse(404, "Nothing Found"), status=status.HTTP_404_NOT_FOUND)
+        todo_list = TodoItem.objects.all()
+        serializer = TodoItemSerializer(todo_list,many=True)
+        return Response(response.successResponse(200, "User List", serializer.data), status=status.HTTP_200_OK)
+
+    def delete(self, request, id):
+        print("I am here")
+        response = CustomResponse()
+        instance = self.get_object(id)
+        if not instance:
+            return Response(response.errorResponse(404,"Todo Item not found"), status=status.HTTP_404_NOT_FOUND)
+        
+        instance.delete()
+        return Response(response.successResponse(200, "Todo has been deleted successufully"), status=status.HTTP_200_OK)
+    
+    def put (self, request, id):
+        response = CustomResponse()
+        instance = self.get_object(id)
+        if not instance:
+            return Response(response.errorResponse(404, "Todo Item not found"), status=status.HTTP_404_NOT_FOUND)
+        data = {
+            "created_by": request.data.get("created_by"),
+            "description": request.data.get("description")
+        }
+
+        serializer = TodoItemSerializer(instance, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(response.successResponse(200, "Todo has  been updated succesfully", serializer.data), status=status.HTTP_200_OK)
+        
+        return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+
 
 class CustomResponse():
     def successResponseToken(self, code, refresh, access, msg, data=dict()):

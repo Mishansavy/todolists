@@ -7,10 +7,11 @@ export default function Todolist() {
   const [activity, setActivity] = useState("");
   const [message, setMessage] = useState("");
   const [listData, setListData] = useState([]);
+  console.log("🚀 ~ Todolist ~ listData:", listData);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
+  const [deletedMsg, setDeletedMsg] = useState("");
   //checking and showing the data of logged in user only
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // passing user data after logging in and adding uselocation
   const location = useLocation();
@@ -54,11 +55,12 @@ export default function Todolist() {
       axios
         .post("http://localhost:8000/api/todoitems/", {
           description: activity,
-          created_by: userData.user_name,
+          created_by: userData.user_id,
         })
         .then((response) => {
           setListData([...listData, response.data]);
           setActivity("");
+
           console.log(response.data);
           <div>{response.message}</div>;
         })
@@ -67,14 +69,22 @@ export default function Todolist() {
   }
 
   function removeActivity(i) {
-    const itemToDelete = listData[i];
+    console.log("🚀 ~ removeActivity ~ i:", i);
+    console.log("🚀 ~ removeActivity ~ listData:", listData);
+
+    // console.log("item to delete : ", itemToDelete);
     axios
-      .delete(`http://localhost:8000/api/todoitems/${itemToDelete.id}/`)
+      .delete(`http://localhost:8000/api/delete/${i}/`)
       .then((response) => {
-        const newListData = listData.filter(
-          (item) => item.id !== itemToDelete.id
+        const newListData = listData?.navigation?.filter(
+          (item) => item.id !== i
         );
+        console.log("🚀 ~ .then ~ newListData:", newListData);
         setListData(newListData);
+
+        if (response) {
+          setDeletedMsg(response.message);
+        }
       })
       .catch((error) => console.error("Error deleting todo item: ", error));
   }
@@ -121,6 +131,7 @@ export default function Todolist() {
   //         "http://localhost:8000/api/todoitems/"
   //       );
   //       setListData(listResponse.data);
+  //       console.log("list data : ", listData);
   //     } catch (error) {
   //       console.error("Error fetching data: ", error);
   //     }
@@ -128,6 +139,7 @@ export default function Todolist() {
   //   fetchData();
   // }, [userData]);
   //testing
+
   useEffect(() => {
     if (userData) {
       // user data description field
@@ -145,7 +157,7 @@ export default function Todolist() {
     }
     // fetch and set list data
     axios
-      .get("http://localhost:8000/api/todoitems/")
+      .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
       .then((response) => setListData(response.data))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData]);
@@ -190,14 +202,15 @@ export default function Todolist() {
         Logout
       </button>
       <div className="listHeading">Your List</div>
-      {userData &&
-        userData.user_id &&
-        // listData.map((data, i) => (
-        listData
-          .filter((data) => data.created_by === userData.user_name)
-          .map((filteredData, i) => (
+      {/* {console.log("listData of listHeading: ", listData)} */}
+      {
+        // userData.user_id &&
+        // listData?.navigation?.length &&
+        //   listData?.navigation?.map((item) => (
+        Array.isArray(listData.navigation) && listData.navigation.length > 0 ? (
+          listData.navigation.map((item) => (
             <div
-              key={i}
+              key={item.id}
               style={{
                 display: "flex",
                 margin: "10px",
@@ -206,9 +219,7 @@ export default function Todolist() {
                 alignItems: "center",
               }}
             >
-              {/* {console.log("userData: ", userData)} */}
-              {console.log("Data: ", filteredData)}
-              {editingIndex === i ? (
+              {editingIndex === item.id ? (
                 <>
                   <input
                     type="text"
@@ -222,23 +233,33 @@ export default function Todolist() {
                 </>
               ) : (
                 <>
-                  <div className="list-data">{filteredData.description}</div>
+                  <div className="list-data">{item.description}</div>
                   <div className="list-time">
-                    {moment(filteredData?.created_at).format("YYYY-MM-DD")}
+                    {moment(item?.created_at).format("YYYY-MM-DD")}
                   </div>
-                  <div className="list-time">{filteredData.created_by}</div>
+                  <div className="list-time">{item.created_by}</div>
                   <div className="list-btn">
-                    <button className="btn" onClick={() => removeActivity(i)}>
+                    <button
+                      className="btn"
+                      onClick={() => removeActivity(item?.id)}
+                    >
                       Remove
                     </button>
-                    <button className="btn" onClick={() => editActivity(i)}>
+                    <button
+                      className="btn"
+                      onClick={() => editActivity(item?.id)}
+                    >
                       Edit
                     </button>
                   </div>
                 </>
               )}
             </div>
-          ))}
+          ))
+        ) : (
+          <p>no items avaiable</p>
+        )
+      }
     </div>
   );
 }

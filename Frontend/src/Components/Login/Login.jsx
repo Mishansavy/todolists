@@ -26,6 +26,7 @@ const Login = () => {
         setUserData(user_data);
 
         //redirect to the homepage
+        console.log(user_data);
         navigate("/", { state: { userData: user_data } });
       } else {
         console.log("login failed. Server response:", response.data);
