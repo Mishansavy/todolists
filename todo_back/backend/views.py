@@ -194,7 +194,9 @@ class UserAPIIDView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(response.successResponse(200, "User Details Updated Successfully", serializer.data), status=status.HTTP_200_OK)
-        return Response(response.errorResponse(400, "Bad Request"), status=status.HTTP_400_BAD_REQUEST)
+        # Provide more detailed error messages
+        error_details = serializer.errors
+        return Response(response.errorResponse(400, "Bad Request", errors=error_details), status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id):
         user = request.user

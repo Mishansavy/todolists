@@ -7,7 +7,7 @@ export default function Todolist() {
   const [activity, setActivity] = useState("");
   const [message, setMessage] = useState("");
   const [listData, setListData] = useState([]);
-  console.log("🚀 ~ Todolist ~ listData:", listData);
+  // console.log("🚀 ~ Todolist ~ listData:", listData);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
   const [deletedMsg, setDeletedMsg] = useState("");
