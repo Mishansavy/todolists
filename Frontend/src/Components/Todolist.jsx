@@ -11,8 +11,6 @@ export default function Todolist() {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
   const [deletedMsg, setDeletedMsg] = useState("");
-  //checking and showing the data of logged in user only
-
   // passing user data after logging in and adding uselocation
   const location = useLocation();
   const userData = location.state?.userData;
@@ -58,10 +56,10 @@ export default function Todolist() {
           created_by: userData.user_id,
         })
         .then((response) => {
-          setListData([...listData, response.data]);
+          setListData([...listData, response.data.navigation]);
           setActivity("");
 
-          console.log(response.data);
+          console.log(response.data.navigation);
           <div>{response.message}</div>;
         })
         .catch((error) => console.error("Error adding todo item: ", error));
@@ -76,15 +74,14 @@ export default function Todolist() {
     axios
       .delete(`http://localhost:8000/api/delete/${i}/`)
       .then((response) => {
+        if (response) {
+          setDeletedMsg(response.message);
+        }
         const newListData = listData?.navigation?.filter(
           (item) => item.id !== i
         );
         console.log("🚀 ~ .then ~ newListData:", newListData);
         setListData(newListData);
-
-        if (response) {
-          setDeletedMsg(response.message);
-        }
       })
       .catch((error) => console.error("Error deleting todo item: ", error));
   }
@@ -158,9 +155,9 @@ export default function Todolist() {
     // fetch and set list data
     axios
       .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
-      .then((response) => setListData(response.data))
+      .then((response) => setListData(response.data.navigation))
       .catch((error) => console.error("error fetching todo items: ", error));
-  }, [userData]);
+  }, [userData, deletedMsg]);
 
   return (
     <div className="container">
@@ -207,8 +204,8 @@ export default function Todolist() {
         // userData.user_id &&
         // listData?.navigation?.length &&
         //   listData?.navigation?.map((item) => (
-        Array.isArray(listData.navigation) && listData.navigation.length > 0 ? (
-          listData.navigation.map((item) => (
+        Array.isArray(listData) && listData?.length > 0 ? (
+          listData.map((item) => (
             <div
               key={item.id}
               style={{
