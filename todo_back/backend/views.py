@@ -84,6 +84,14 @@ class todoitemsDelete(APIView):
         instance.delete()
         return Response(response.successResponse(200, "Todo has been deleted successufully"), status=status.HTTP_200_OK)
     
+class todoitemsUpdate():
+    def get_object(self, id):
+        try:
+            user = TodoItem.objects.get(id=id)
+            return user
+        except TodoItem.DoesNotExist:
+            return None
+        
     def put (self, request, id):
         response = CustomResponse()
         instance = self.get_object(id)
@@ -93,14 +101,12 @@ class todoitemsDelete(APIView):
             "created_by": request.data.get("created_by"),
             "description": request.data.get("description")
         }
-
         serializer = TodoItemSerializer(instance, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(response.successResponse(200, "Todo has  been updated succesfully", serializer.data), status=status.HTTP_200_OK)
         
         return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
-
 
 class CustomResponse():
     def successResponseToken(self, code, refresh, access, msg, data=dict()):
@@ -112,11 +118,11 @@ class CustomResponse():
         }
         return context
     
-    def successResponse(self, code, msg, navigation=dict()):
+    def successResponse(self, code, msg, description=dict()):
         context = {
             "status_code": code,
             "message": msg,
-            "navigation": navigation,
+            "description": description,
             "error": []
         }
         return context

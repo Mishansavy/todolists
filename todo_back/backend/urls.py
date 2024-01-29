@@ -14,6 +14,8 @@ urlpatterns = [
     path('todoitems/<int:id>/', TodoItems.as_view()),
     path('delete/<int:id>/', todoitemsDelete.as_view()), 
     path('delete/', todoitemsDelete.as_view()),
+    path('update/<int:id>/', todoitemsUpdate.as_view()),
+    path('update/',todoitemsUpdate.as_view()),
 ]
 
 

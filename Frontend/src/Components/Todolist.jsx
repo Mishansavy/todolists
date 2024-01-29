@@ -59,10 +59,10 @@ export default function Todolist() {
           created_by: userData.user_id,
         })
         .then((response) => {
-          setListData([...listData, response.data.navigation]);
+          setListData([...listData, response.data.description]);
           setActivity("");
           setMessage(response.data.message);
-          console.log(response.data.navigation);
+          console.log(response.data.description);
           <div>{response.message}</div>;
         })
         .catch((error) => console.error("Error adding todo item: ", error));
@@ -72,8 +72,6 @@ export default function Todolist() {
   function removeActivity(i) {
     console.log("🚀 ~ removeActivity ~ i:", i);
     console.log("🚀 ~ removeActivity ~ listData:", listData);
-
-    // console.log("item to delete : ", itemToDelete);
     axios
       .delete(`http://localhost:8000/api/delete/${i}/`)
       .then((response) => {
@@ -81,7 +79,7 @@ export default function Todolist() {
           setDeletedMsg(response.message);
           axios
             .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
-            .then((response) => setListData(response.data.navigation))
+            .then((response) => setListData(response.data.description))
             .catch((error) =>
               console.error("error fetching todo items: ", error)
             );
@@ -98,7 +96,7 @@ export default function Todolist() {
   function editActivity(i) {
     setEditingIndex(i);
     setEditedText(listData[i].description);
-    console.log(i);
+    console.log(setEditedText);
   }
 
   function saveEdit() {
@@ -106,12 +104,9 @@ export default function Todolist() {
     if (editedText.trim() !== "") {
       const itemToEdit = listData[editingIndex];
       const updatedItem = { ...itemToEdit, description: editedText };
-
+      console.log("item to edit", itemToEdit);
       axios
-        .put(
-          `http://localhost:8000/api/todoitems/${itemToEdit.id}/`,
-          updatedItem
-        )
+        .put(`http://localhost:8000/api/delete/${id}/`, updatedItem)
         .then((response) => {
           const updatedListData = listData.map((item) =>
             item.id === itemToEdit.id ? response.data : item
@@ -141,7 +136,7 @@ export default function Todolist() {
     // fetch and set list data
     axios
       .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
-      .then((response) => setListData(response.data.navigation))
+      .then((response) => setListData(response.data.description))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData, deletedMsg]);
 
