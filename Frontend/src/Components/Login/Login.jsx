@@ -6,6 +6,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [errorData, setErrorData] = useState("");
+  // console.log("🚀 ~ Login ~ errorData:", errorData);
   const [loading, setLoding] = useState(false);
   const navigate = useNavigate();
 
@@ -17,6 +19,7 @@ const Login = () => {
         "http://127.0.0.1:8000/accounts/login/",
         { username, password }
       );
+
       if (response.data.result) {
         setIsLoggedIn(true);
         console.log("Login successful");
@@ -27,7 +30,7 @@ const Login = () => {
 
         //redirect to the homepage
         console.log(user_data);
-        navigate("/", { state: { userData: user_data } });
+        navigate("/remo", { state: { userData: user_data } });
       } else {
         console.log("login failed. Server response:", response.data);
       }
@@ -36,7 +39,8 @@ const Login = () => {
 
       // log detailed info about the error response if available
       if (error.response) {
-        console.log("error response data : ", error.response.data);
+        console.log("error response data : ", error.response.data.message);
+        setErrorData(error.response.data.message);
       }
     } finally {
       setLoding(false);
@@ -44,6 +48,7 @@ const Login = () => {
   };
   return (
     <div>
+      {errorData && <p>{errorData}</p>}
       <input
         type="text"
         placeholder="username"

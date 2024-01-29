@@ -1,4 +1,4 @@
-import "./App.css";
+import { Home } from "./Components/Home/Home";
 import Login from "./Components/Login/login";
 import { Logout } from "./Components/Logout/Logout";
 import { Signup } from "./Components/Signup/Signup";
@@ -11,8 +11,9 @@ function App() {
         {/* <Todolist /> */}
         {/* login route  */}
         <Routes>
-          <Route path="/" element={<Todolist />} />
+          <Route path="/" element={<Home />} />
           <Route path="/todolists/login" element={<Login />} />
+          <Route path="/remo" element={<Todolist />} />
           <Route path="/todolists/logout" element={<Logout />} />
           <Route path="/todolist/signup" element={<Signup />} />
         </Routes>

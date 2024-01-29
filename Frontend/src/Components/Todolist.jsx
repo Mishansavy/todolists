@@ -61,7 +61,7 @@ export default function Todolist() {
         .then((response) => {
           setListData([...listData, response.data.navigation]);
           setActivity("");
-
+          setMessage(response.data.message);
           console.log(response.data.navigation);
           <div>{response.message}</div>;
         })
@@ -79,12 +79,18 @@ export default function Todolist() {
       .then((response) => {
         if (response) {
           setDeletedMsg(response.message);
+          axios
+            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+            .then((response) => setListData(response.data.navigation))
+            .catch((error) =>
+              console.error("error fetching todo items: ", error)
+            );
         }
-        const newListData = listData?.navigation?.filter(
-          (item) => item.id !== i
-        );
-        console.log("🚀 ~ .then ~ newListData:", newListData);
-        setListData(newListData);
+        // const newListData = listData?.navigation?.filter(
+        //   (item) => item.id !== i
+        // );
+        // console.log("🚀 ~ .then ~ newListData:", newListData);
+        // setListData(newListData);
       })
       .catch((error) => console.error("Error deleting todo item: ", error));
   }
@@ -92,9 +98,11 @@ export default function Todolist() {
   function editActivity(i) {
     setEditingIndex(i);
     setEditedText(listData[i].description);
+    console.log(i);
   }
 
   function saveEdit() {
+    console.log("Edited Text", editedText);
     if (editedText.trim() !== "") {
       const itemToEdit = listData[editingIndex];
       const updatedItem = { ...itemToEdit, description: editedText };
@@ -114,31 +122,6 @@ export default function Todolist() {
         .catch((error) => console.error("Error editing todo item: ", error));
     }
   }
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       if (userData) {
-  //         //fetch and set user-specific data based on user id
-  //         const userResponse = await axios.get(
-  //           `http://localhost:8000/accounts/register/user/${userData.user_id}`
-  //         );
-  //         setUserDescription(userResponse.data.description);
-  //         setIsLoggedIn(true);
-  //       }
-  //       //fetch and set list data
-  //       const listResponse = await axios.get(
-  //         "http://localhost:8000/api/todoitems/"
-  //       );
-  //       setListData(listResponse.data);
-  //       console.log("list data : ", listData);
-  //     } catch (error) {
-  //       console.error("Error fetching data: ", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [userData]);
-  //testing
 
   useEffect(() => {
     if (userData) {
@@ -244,7 +227,9 @@ export default function Todolist() {
                   <div className="list-btn">
                     <button
                       className="btn"
-                      onClick={() => removeActivity(item?.id)}
+                      onClick={() => {
+                        removeActivity(item?.id);
+                      }}
                     >
                       Remove
                     </button>
