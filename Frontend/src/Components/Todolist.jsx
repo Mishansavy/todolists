@@ -23,6 +23,9 @@ export default function Todolist() {
   const Login = () => {
     navigate("/todolists/login");
   };
+  const Signup = () => {
+    navigate("/todolist/signup");
+  };
 
   const handlekeypress = (e) => {
     if (e.key === "Enter") {
@@ -184,6 +187,9 @@ export default function Todolist() {
       </button>
       <button className="addlist" onClick={Login}>
         Login
+      </button>
+      <button className="addlist" onClick={Signup}>
+        Signup
       </button>
       <button
         style={{
