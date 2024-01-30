@@ -7,10 +7,11 @@ export default function Todolist() {
   const [activity, setActivity] = useState("");
   const [message, setMessage] = useState("");
   const [listData, setListData] = useState([]);
-  // console.log("🚀 ~ Todolist ~ listData:", listData);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
   const [deletedMsg, setDeletedMsg] = useState("");
+  const [description, setDescription] = useState("");
+
   // passing user data after logging in and adding uselocation
   const location = useLocation();
   const userData = location.state?.userData;
@@ -59,7 +60,7 @@ export default function Todolist() {
           created_by: userData.user_id,
         })
         .then((response) => {
-          setListData([...listData, response.data.description]);
+          setListData([...listData, response.data]);
           setActivity("");
           setMessage(response.data.message);
           console.log(response.data.description);
@@ -70,8 +71,8 @@ export default function Todolist() {
   }
 
   function removeActivity(i) {
-    console.log("🚀 ~ removeActivity ~ i:", i);
-    console.log("🚀 ~ removeActivity ~ listData:", listData);
+    // console.log("🚀 ~ removeActivity ~ i:", i);
+    // console.log("🚀 ~ removeActivity ~ listData:", listData);
     axios
       .delete(`http://localhost:8000/api/delete/${i}/`)
       .then((response) => {
@@ -94,25 +95,38 @@ export default function Todolist() {
   }
 
   function editActivity(i) {
+    // console.log("id", i);
+    // console.log("editing item with index", i);
+    const listDataItem = listData;
+    let item = listDataItem.filter((item) => item.id === i);
+    // console.log("listData ", listDataItem);
+    console.log(item[0].description);
     setEditingIndex(i);
-    setEditedText(listData[i].description);
-    console.log(setEditedText);
+
+    setEditedText(item[0].description);
+
+    ///////////////////////////////////////
+    // setEditingIndex(i);
+    // setEditedText(listData.description);
+    // console.log(setEditedText);
   }
 
   function saveEdit() {
     console.log("Edited Text", editedText);
     if (editedText.trim() !== "") {
-      const itemToEdit = listData[editingIndex];
-      const updatedItem = { ...itemToEdit, description: editedText };
-      console.log("item to edit", itemToEdit);
+      const id = editingIndex;
+
+      const updatedItem = { description: editedText };
       axios
-        .put(`http://localhost:8000/api/delete/${id}/`, updatedItem)
+        .patch(`http://localhost:8000/api/update/${id}/`, updatedItem)
         .then((response) => {
           const updatedListData = listData.map((item) =>
-            item.id === itemToEdit.id ? response.data : item
+            item.id === id ? response.data : item
           );
           setListData(updatedListData);
           setEditingIndex(-1);
+          setEditedText("");
+          console.log("updatedListData", updatedListData);
         })
         .catch((error) => console.error("Error editing todo item: ", error));
     }
@@ -183,66 +197,60 @@ export default function Todolist() {
         Logout
       </button>
       <div className="listHeading">Your List</div>
-      {/* {console.log("listData of listHeading: ", listData)} */}
-      {
-        // userData.user_id &&
-        // listData?.navigation?.length &&
-        //   listData?.navigation?.map((item) => (
-        Array.isArray(listData) && listData?.length > 0 ? (
-          listData.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                display: "flex",
-                margin: "10px",
-                gap: "20px",
-                width: "auto",
-                alignItems: "center",
-              }}
-            >
-              {editingIndex === item.id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editedText}
-                    onChange={(e) => setEditedText(e.target.value)}
-                    placeholder="Edit your item..."
-                  />
-                  <button className="save" onClick={saveEdit}>
-                    Save
+      {Array.isArray(listData) && listData?.length > 0 ? (
+        listData.map((item) => (
+          <div
+            key={item.id}
+            style={{
+              display: "flex",
+              margin: "10px",
+              gap: "20px",
+              width: "auto",
+              alignItems: "center",
+            }}
+          >
+            {editingIndex === item.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  placeholder="Edit your item..."
+                />
+                <button className="save" onClick={saveEdit}>
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="list-data">{item.description}</div>
+                <div className="list-time">
+                  {moment(item?.created_at).format("YYYY-MM-DD")}
+                </div>
+                <div className="list-time">{item.created_by}</div>
+                <div className="list-btn">
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      removeActivity(item?.id);
+                    }}
+                  >
+                    Remove
                   </button>
-                </>
-              ) : (
-                <>
-                  <div className="list-data">{item.description}</div>
-                  <div className="list-time">
-                    {moment(item?.created_at).format("YYYY-MM-DD")}
-                  </div>
-                  <div className="list-time">{item.created_by}</div>
-                  <div className="list-btn">
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        removeActivity(item?.id);
-                      }}
-                    >
-                      Remove
-                    </button>
-                    <button
-                      className="btn"
-                      onClick={() => editActivity(item?.id)}
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>no items avaiable</p>
-        )
-      }
+                  <button
+                    className="btn"
+                    onClick={() => editActivity(item?.id)}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))
+      ) : (
+        <p>no items avaiable</p>
+      )}
     </div>
   );
 }

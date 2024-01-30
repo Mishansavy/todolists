@@ -1,4 +1,4 @@
-import { Home } from "./Components/Home/Home";
+import { Home } from "./Pages/Home/Home";
 import Login from "./Components/Login/login";
 import { Logout } from "./Components/Logout/Logout";
 import { Signup } from "./Components/Signup/Signup";

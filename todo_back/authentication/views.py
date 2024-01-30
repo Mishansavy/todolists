@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
 from authentication.serializers import *
+from rest_framework.decorators import permission_classes
 
 User = get_user_model()
 
@@ -52,6 +53,7 @@ class CustomResponse():
         }
         return res
 
+@permission_classes([AllowAny])
 class UserCreate(APIView):
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
@@ -121,7 +123,8 @@ class UserAPIIDView(APIView):
             return Response(response.errorResponse(404, "Nothing Found"), status=status.HTTP_404_NOT_FOUND)
         instance.delete()
         return Response(response.successResponse(200, "User Deleted Successfully"),status=status.HTTP_200_OK)
-    
+
+@permission_classes([AllowAny])
 class UserLogin(APIView):
     def post(self, request):
         response = CustomResponse()
@@ -151,6 +154,7 @@ class UserLogin(APIView):
         # else:
         #     return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
          
+@permission_classes([AllowAny])
 class LogOut(APIView):
     def get(self, request):
         print("user: ", request.user)
