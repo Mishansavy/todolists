@@ -223,7 +223,10 @@ export default function Todolist() {
               </>
             ) : (
               <>
-                <div className="list-data">{item.description}</div>
+                {/* <div className="list-data">{String(item.description)}</div> */}
+                <div className="list-data">
+                  {JSON.stringify(item.description)}
+                </div>
                 <div className="list-time">
                   {moment(item?.created_at).format("YYYY-MM-DD")}
                 </div>
