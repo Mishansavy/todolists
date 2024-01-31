@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+
 import "./todolist.css";
 import axios from "axios";
 import moment from "moment";
@@ -52,7 +55,7 @@ export default function Todolist() {
       console.error("logout error : ", error);
     }
   };
-
+  // add
   function addActivity() {
     if (activity.trim() !== "") {
       axios
@@ -77,31 +80,61 @@ export default function Todolist() {
         .catch((error) => console.error("Error adding todo item: ", error));
     }
   }
+  //remove
+  // function removeActivity(i) {
+  //   // console.log("🚀 ~ removeActivity ~ i:", i);
+  //   // console.log("🚀 ~ removeActivity ~ listData:", listData);
+  //   axios
+  //     .delete(`http://localhost:8000/api/delete/${i}/`)
+  //     .then((response) => {
+  //       if (response) {
+  //         setRemovemsg(response.data.message);
+  //         axios
+  //           .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+  //           .then((response) => setListData(response.data.description))
+  //           .catch((error) =>
+  //             console.error("error fetching todo items: ", error)
+  //           );
+  //       }
+  //       // const newListData = listData?.navigation?.filter(
+  //       //   (item) => item.id !== i
+  //       // );
+  //       // console.log("🚀 ~ .then ~ newListData:", newListData);
+  //       // setListData(newListData);
+  //     })
+  //     .catch((error) => console.error("Error deleting todo item: ", error));
+  // }
+  //chatgpt
 
   function removeActivity(i) {
-    // console.log("🚀 ~ removeActivity ~ i:", i);
-    // console.log("🚀 ~ removeActivity ~ listData:", listData);
-    axios
-      .delete(`http://localhost:8000/api/delete/${i}/`)
-      .then((response) => {
-        if (response) {
-          setRemovemsg(response.data.message);
-          axios
-            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
-            .then((response) => setListData(response.data.description))
-            .catch((error) =>
-              console.error("error fetching todo items: ", error)
-            );
-        }
-        // const newListData = listData?.navigation?.filter(
-        //   (item) => item.id !== i
-        // );
-        // console.log("🚀 ~ .then ~ newListData:", newListData);
-        // setListData(newListData);
-      })
-      .catch((error) => console.error("Error deleting todo item: ", error));
+    try {
+      axios
+        .delete(`http://localhost:8000/api/delete/${i}/`)
+        .then((response) => {
+          if (response) {
+            setRemovemsg(response.data.message);
+            axios
+              .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+              .then((response) => {
+                setListData(response.data.description);
+              })
+              .catch((error) =>
+                console.error("error fetching todo items: ", error)
+              );
+          }
+          showToast(response.data.message); // Show toast on successful removal
+          console.log(response.data);
+        })
+        .catch((error) => console.error("Error deleting todo item: ", error));
+    } catch (error) {
+      console.error("Error deleting todo item: ", error);
+    }
   }
 
+  function showToast(message) {
+    toast.success(message, { autoClose: 1000 }); // Auto-close the toast after 1 second
+  }
+  //edit
   function editActivity(i) {
     const listDataItem = listData;
     let item = listDataItem.filter((item) => item.id === i);
@@ -109,7 +142,7 @@ export default function Todolist() {
     setEditingIndex(i);
     setEditedText(item[0].description);
   }
-
+  //save
   function saveEdit() {
     console.log("Edited Text", editedText);
     if (editedText.trim() !== "") {
@@ -142,7 +175,6 @@ export default function Todolist() {
     if (userData) {
       // user data description field
       setUserDescription(userData.description);
-
       // fetch and set user-specific data based on user Id
       axios
         .get(
@@ -229,11 +261,19 @@ export default function Todolist() {
               </>
             ) : (
               <>
-                <div className="list-data">
+                {/* <div className="list-data">
                   {typeof item.description === "object"
                     ? String(item.description.description)
                     : String(item.description)}
                   {removemsg ? <div>{removemsg}</div> : <div></div>}
+                </div> */}
+
+                <div className="list-data">
+                  {typeof item.description === "object" ? (
+                    <div>{item.description.description}</div>
+                  ) : (
+                    <div>{item.description}</div>
+                  )}
                 </div>
 
                 <div className="list-time">
@@ -263,6 +303,7 @@ export default function Todolist() {
       ) : (
         <p>no items avaiable</p>
       )}
+      <ToastContainer position="bottom-left" closeOnClick pauseOnHover />
     </div>
   );
 }
