@@ -11,6 +11,7 @@ export default function Todolist() {
   const [editedText, setEditedText] = useState("");
   const [deletedMsg, setDeletedMsg] = useState("");
   const [description, setDescription] = useState("");
+  const [removemsg, setRemovemsg] = useState("");
 
   // passing user data after logging in and adding uselocation
   const location = useLocation();
@@ -60,11 +61,18 @@ export default function Todolist() {
           created_by: userData.user_id,
         })
         .then((response) => {
-          setListData([...listData, response.data]);
+          // setListData([...listData, response.data]);
+          // setActivity("");
+          // setMessage(response.data.message);
+          // console.log(response.data.description);
+          // <div>{response.message}</div>;
+          axios
+            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+            .then((response) => setListData(response.data.description))
+            .catch((error) => console.log("error fetching todo items", error));
           setActivity("");
           setMessage(response.data.message);
           console.log(response.data.description);
-          <div>{response.message}</div>;
         })
         .catch((error) => console.error("Error adding todo item: ", error));
     }
@@ -77,7 +85,7 @@ export default function Todolist() {
       .delete(`http://localhost:8000/api/delete/${i}/`)
       .then((response) => {
         if (response) {
-          setDeletedMsg(response.message);
+          setRemovemsg(response.data.message);
           axios
             .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
             .then((response) => setListData(response.data.description))
@@ -95,20 +103,11 @@ export default function Todolist() {
   }
 
   function editActivity(i) {
-    // console.log("id", i);
-    // console.log("editing item with index", i);
     const listDataItem = listData;
     let item = listDataItem.filter((item) => item.id === i);
-    // console.log("listData ", listDataItem);
     console.log(item[0].description);
     setEditingIndex(i);
-
     setEditedText(item[0].description);
-
-    ///////////////////////////////////////
-    // setEditingIndex(i);
-    // setEditedText(listData.description);
-    // console.log(setEditedText);
   }
 
   function saveEdit() {
@@ -120,6 +119,13 @@ export default function Todolist() {
       axios
         .patch(`http://localhost:8000/api/update/${id}/`, updatedItem)
         .then((response) => {
+          axios
+            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+            .then((response) => setListData(response.data.description))
+            .catch((error) =>
+              console.error("error fetching todo items: ", error)
+            );
+
           const updatedListData = listData.map((item) =>
             item.id === id ? response.data : item
           );
@@ -223,10 +229,13 @@ export default function Todolist() {
               </>
             ) : (
               <>
-                {/* <div className="list-data">{String(item.description)}</div> */}
                 <div className="list-data">
-                  {JSON.stringify(item.description)}
+                  {typeof item.description === "object"
+                    ? String(item.description.description)
+                    : String(item.description)}
+                  {removemsg ? <div>{removemsg}</div> : <div></div>}
                 </div>
+
                 <div className="list-time">
                   {moment(item?.created_at).format("YYYY-MM-DD")}
                 </div>
