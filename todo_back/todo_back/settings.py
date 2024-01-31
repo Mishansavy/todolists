@@ -26,8 +26,11 @@ SECRET_KEY = 'django-insecure-dh=6$vn7-d)*ltwnr@)aie^s+&kc^4w1c=ypq*07xgni(ge8&!
 DEBUG = True
 AUTH_USER_MODEL = 'authentication.CustomUser'
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Add the correct origin of your React app
+    # "http://localhost:5173",
+      "http://192.168.1.161",  
 ]
+ALLOWED_HOSTS = ['192.168.1.161', '192.168.1.161/5173', 'localhost']
+
 CORS_ALLOW_CREDENTIALS = True
 
 

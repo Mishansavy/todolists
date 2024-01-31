@@ -36,7 +36,7 @@ export const Signup = () => {
           // alert(JSON.stringify(values, null, 2));
           navigate("/todolists/login");
           axios
-            .post("http://localhost:8000/accounts/register/user/", values)
+            .post("http://192.168.1.161:8000/accounts/register/user/", values)
             .then((response) => {
               console.log("API Response", response.data);
               console.log("form values", values);

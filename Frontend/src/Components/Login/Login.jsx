@@ -15,10 +15,15 @@ const Login = () => {
     try {
       setLoding(true);
 
+      // const response = await axios.post(
+      //   "http://127.0.0.1:8000/accounts/login/",
+      //   { username, password }
+      // );
       const response = await axios.post(
-        "http://127.0.0.1:8000/accounts/login/",
+        "http://192.168.1.161:8000/accounts/login/",
         { username, password }
       );
+
 
       if (response.data.result) {
         setIsLoggedIn(true);

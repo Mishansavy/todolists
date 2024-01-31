@@ -51,7 +51,7 @@ export default function Todolist() {
   function addActivity() {
     if (activity.trim() !== "") {
       axios
-        .post("http://localhost:8000/api/todoitems/", {
+        .post("http://192.168.1.161/api/todoitems/", {
           description: activity,
         })
         .then((response) => {
@@ -66,7 +66,7 @@ export default function Todolist() {
   function removeActivity(i) {
     const itemToDelete = listData[i];
     axios
-      .delete(`http://localhost:8000/api/todoitems/${itemToDelete.id}/`)
+      .delete(`http://192.168.1.161/api/todoitems/${itemToDelete.id}/`)
       .then((response) => {
         const newListData = listData.filter(
           (item) => item.id !== itemToDelete.id
@@ -88,7 +88,7 @@ export default function Todolist() {
 
       axios
         .put(
-          `http://localhost:8000/api/todoitems/${itemToEdit.id}/`,
+          `http://192.168.1.161/api/todoitems/${itemToEdit.id}/`,
           updatedItem
         )
         .then((response) => {
@@ -108,7 +108,7 @@ export default function Todolist() {
 
   // useEffect(() => {
   //   axios
-  //     .get("http://localhost:8000/api/todoitems/")
+  //     .get("http://192.168.1.161/api/todoitems/")
   //     .then((response) => setListData(response.data))
   //     .catch((error) => console.error("Error fetching todo items: ", error));
   // }, []);
@@ -120,7 +120,7 @@ export default function Todolist() {
       // fetch and set user-specific data based on user Id
       axios
         .get(
-          `http://localhost:8000/accounts/register/user/${userData.user_id}/`
+          `http://192.168.1.161/accounts/register/user/${userData.user_id}/`
         )
         .then((response) => {
           setUserDescription(response.data.description);
@@ -129,7 +129,7 @@ export default function Todolist() {
     }
     // fetch and set list data
     axios
-      .get("http://localhost:8000/api/todoitems/")
+      .get("http://192.168.1.161/api/todoitems/")
       .then((response) => setListData(response.data))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData]);

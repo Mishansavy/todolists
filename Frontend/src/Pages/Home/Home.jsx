@@ -1,6 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { Buttons, Main, LoginBtn, SignupBtn } from "../../Styles/Styles";
+import checklist from "../../assets/Img/checklist.png";
+import {
+  Buttons,
+  Main,
+  LoginBtn,
+  SignupBtn,
+  HeadingHeader,
+  LeftDiv,
+  RightDiv,
+  HomeImg,
+} from "../../Styles/Styles";
 export const Home = () => {
   const navigate = useNavigate();
   //routing
@@ -13,11 +23,17 @@ export const Home = () => {
 
   return (
     <Main>
-      <div>Welcome to Todo Remo</div>
-      <Buttons>
-        <LoginBtn onClick={Login}>Login</LoginBtn>
-        <SignupBtn onClick={Signup}>Signup</SignupBtn>
-      </Buttons>
+      <LeftDiv>
+        <HomeImg src={checklist} alt="" />
+      </LeftDiv>
+      <RightDiv>
+        
+        <HeadingHeader>Welcome to Remo</HeadingHeader>
+        <Buttons>
+          <LoginBtn onClick={Login}>Login</LoginBtn>
+          <SignupBtn onClick={Signup}>Signup</SignupBtn>
+        </Buttons>
+      </RightDiv>
     </Main>
   );
 };

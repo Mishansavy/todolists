@@ -42,14 +42,13 @@ export default function Todolist() {
   const Logout = async () => {
     try {
       const logoutResponse = await axios.get(
-        "http://127.0.0.1:8000/accounts/logout/",
+        "http://192.168.1.161:8000/accounts/logout/",
         { message }
       );
       if (logoutResponse.data.message) {
         // setIsLoggedIn(false);
-        console.log("your are logged out");
         navigate("/");
-        console.log(message);
+        // console.log(message);
       }
     } catch (error) {
       console.error("logout error : ", error);
@@ -59,7 +58,7 @@ export default function Todolist() {
   function addActivity() {
     if (activity.trim() !== "") {
       axios
-        .post("http://localhost:8000/api/todoitems/", {
+        .post("http://192.168.1.161:8000/api/todoitems/", {
           description: activity,
           created_by: userData.user_id,
         })
@@ -70,51 +69,28 @@ export default function Todolist() {
           // console.log(response.data.description);
           // <div>{response.message}</div>;
           axios
-            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+            .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
             .then((response) => setListData(response.data.description))
             .catch((error) => console.log("error fetching todo items", error));
           setActivity("");
           setMessage(response.data.message);
-          console.log(response.data.description);
+          // console.log(response.data.description);
+          showToast(response.data.message);
         })
         .catch((error) => console.error("Error adding todo item: ", error));
     }
   }
   //remove
-  // function removeActivity(i) {
-  //   // console.log("🚀 ~ removeActivity ~ i:", i);
-  //   // console.log("🚀 ~ removeActivity ~ listData:", listData);
-  //   axios
-  //     .delete(`http://localhost:8000/api/delete/${i}/`)
-  //     .then((response) => {
-  //       if (response) {
-  //         setRemovemsg(response.data.message);
-  //         axios
-  //           .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
-  //           .then((response) => setListData(response.data.description))
-  //           .catch((error) =>
-  //             console.error("error fetching todo items: ", error)
-  //           );
-  //       }
-  //       // const newListData = listData?.navigation?.filter(
-  //       //   (item) => item.id !== i
-  //       // );
-  //       // console.log("🚀 ~ .then ~ newListData:", newListData);
-  //       // setListData(newListData);
-  //     })
-  //     .catch((error) => console.error("Error deleting todo item: ", error));
-  // }
-  //chatgpt
 
   function removeActivity(i) {
     try {
       axios
-        .delete(`http://localhost:8000/api/delete/${i}/`)
+        .delete(`http://192.168.1.161:8000/api/delete/${i}/`)
         .then((response) => {
           if (response) {
             setRemovemsg(response.data.message);
             axios
-              .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+              .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
               .then((response) => {
                 setListData(response.data.description);
               })
@@ -132,7 +108,7 @@ export default function Todolist() {
   }
 
   function showToast(message) {
-    toast.success(message, { autoClose: 1000 }); // Auto-close the toast after 1 second
+    toast.success(message, { autoClose: 2500 }); // Auto-close the toast after 1 second
   }
   //edit
   function editActivity(i) {
@@ -150,10 +126,10 @@ export default function Todolist() {
 
       const updatedItem = { description: editedText };
       axios
-        .patch(`http://localhost:8000/api/update/${id}/`, updatedItem)
+        .patch(`http://192.168.1.161:8000/api/update/${id}/`, updatedItem)
         .then((response) => {
           axios
-            .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+            .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
             .then((response) => setListData(response.data.description))
             .catch((error) =>
               console.error("error fetching todo items: ", error)
@@ -162,6 +138,7 @@ export default function Todolist() {
           const updatedListData = listData.map((item) =>
             item.id === id ? response.data : item
           );
+          showToast(response.data.message);
           setListData(updatedListData);
           setEditingIndex(-1);
           setEditedText("");
@@ -178,7 +155,7 @@ export default function Todolist() {
       // fetch and set user-specific data based on user Id
       axios
         .get(
-          `http://localhost:8000/accounts/register/user/${userData.user_id}/`
+          `http://192.168.1.161:8000/accounts/register/user/${userData.user_id}/`
         )
         .then((response) => {
           setUserDescription(response.data.description);
@@ -187,7 +164,7 @@ export default function Todolist() {
     }
     // fetch and set list data
     axios
-      .get(`http://localhost:8000/api/todoitems/${userData?.user_id}/`)
+      .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
       .then((response) => setListData(response.data.description))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData, deletedMsg]);
@@ -199,7 +176,7 @@ export default function Todolist() {
       <div>
         {userData ? (
           <h2 className="header" style={{ color: "red" }}>
-            welcome {userData.user_name} id {userData.user_id}
+            welcome {userData.user_name} 
           </h2>
         ) : (
           <p>No user data available</p>
@@ -279,7 +256,7 @@ export default function Todolist() {
                 <div className="list-time">
                   {moment(item?.created_at).format("YYYY-MM-DD")}
                 </div>
-                <div className="list-time">{item.created_by}</div>
+                {/* <div className="list-time">{item.created_by}</div> */}
                 <div className="list-btn">
                   <button
                     className="btn"
