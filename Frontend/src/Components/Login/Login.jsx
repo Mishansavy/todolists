@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import {
+  Main,
+  RightDiv,
+  LeftDiv,
+  HomeImg,
+  HeadingHeader,
+  Container,
+  InputStyles,
+  LoginBtn,
+  SignupBtn,
+} from "../../Styles/Styles";
+import MainLogo from "../../assets/Img/mainLogo-removebg.png";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +36,6 @@ const Login = () => {
         "http://192.168.1.161:8000/accounts/login/",
         { username, password }
       );
-
 
       if (response.data.result) {
         setIsLoggedIn(true);
@@ -51,29 +63,45 @@ const Login = () => {
       setLoding(false);
     }
   };
+  const Signup = () => {
+    navigate("/todolist/signup");
+  };
   return (
-    <div>
-      {errorData && <p>{errorData}</p>}
-      <input
-        type="text"
-        placeholder="username"
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <input
-        type="password"
-        style={{
-          marginTop: "10px",
-          marginBottom: "10px",
-        }}
-        placeholder="enter your password"
-        onChange={(e) => setPassword(e.target.value)}
-      />{" "}
-      <br />
-      <button onClick={handleLogin} disabled={loading}>
-        {loading ? "logging in.." : "login"}
-      </button>
-    </div>
+    <Main>
+      <LeftDiv>
+        <HomeImg src={MainLogo} alt="" />
+      </LeftDiv>
+      <RightDiv style={{ justifyContent: "start" }}>
+        <Container style={{ justifyContent: "center" }}>
+          <HeadingHeader style={{ color: "#0B60B0" }}>
+            Login to Remo
+          </HeadingHeader>
+          <div>
+            {errorData && <p>{errorData}</p>}
+            <InputStyles
+              type="text"
+              placeholder="username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <br />
+            <InputStyles
+              type="password"
+              style={{
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
+              placeholder="enter your password"
+              onChange={(e) => setPassword(e.target.value)}
+            />{" "}
+            <br />
+            <LoginBtn onClick={handleLogin} disabled={loading}>
+              {loading ? "logging in.." : "login"}
+            </LoginBtn>
+            <SignupBtn onClick={Signup}>Signup</SignupBtn>
+          </div>{" "}
+        </Container>
+      </RightDiv>
+    </Main>
   );
 };
 export default Login;

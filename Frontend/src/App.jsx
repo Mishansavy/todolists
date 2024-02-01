@@ -1,9 +1,9 @@
 import { Home } from "./Pages/Home/Home";
 import Login from "./Components/Login/login";
 import { Logout } from "./Components/Logout/Logout";
-import { Signup } from "./Components/Signup/Signup";
 import Todolist from "./Components/Todolist";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from "./Pages/Signup/Signup";
 function App() {
   return (
     <>

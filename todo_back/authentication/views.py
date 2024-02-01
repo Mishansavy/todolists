@@ -6,8 +6,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate,login, logout
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
+# from rest_framework import authentication
 from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
@@ -126,6 +125,7 @@ class UserAPIIDView(APIView):
 
 @permission_classes([AllowAny])
 class UserLogin(APIView):
+    # authentication_classes = ['JWTAuthentication']
     def post(self, request):
         response = CustomResponse()
         username = request.data.get('username')

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import checklist from "../../assets/Img/checklist.png";
+import MainLogo from "../../assets/Img/mainLogo-removebg.png";
+import RemoLogo from "../../assets/Img/todowithtablet-removebg.png";
 import {
   Buttons,
   Main,
@@ -10,6 +11,7 @@ import {
   LeftDiv,
   RightDiv,
   HomeImg,
+  HomeLogoImage,
 } from "../../Styles/Styles";
 export const Home = () => {
   const navigate = useNavigate();
@@ -24,10 +26,10 @@ export const Home = () => {
   return (
     <Main>
       <LeftDiv>
-        <HomeImg src={checklist} alt="" />
+        <HomeImg src={MainLogo} alt="Remo - Todo App Logo" />
       </LeftDiv>
       <RightDiv>
-        
+        <HomeLogoImage src={RemoLogo} alt="Remo - Todo App Logo" />
         <HeadingHeader>Welcome to Remo</HeadingHeader>
         <Buttons>
           <LoginBtn onClick={Login}>Login</LoginBtn>
