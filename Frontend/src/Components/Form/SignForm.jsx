@@ -1,12 +1,11 @@
 import React from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import MainLogo from "../../assets/Img/mainLogo-removebg.png";
 
 import {
   Container,
   FormContainer,
   HeadingHeader,
-  InputStyles,
   LoginBtn,
   Main,
   RightDiv,
@@ -29,7 +28,7 @@ export const SignForm = () => {
             <FormContainer>
               <div style={{ display: "flex" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="text"
                     id="first_name"
                     name="first_name"
@@ -38,7 +37,7 @@ export const SignForm = () => {
                   <ErrorMessage name="first_name" component="div" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="text"
                     id="middle_name"
                     name="middle_name"
@@ -46,7 +45,7 @@ export const SignForm = () => {
                   />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="text"
                     id="last_name"
                     name="last_name"
@@ -57,7 +56,7 @@ export const SignForm = () => {
               </div>
               <div style={{ display: "flex", margin: "20px 0px" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="text"
                     id="username"
                     name="username"
@@ -66,7 +65,7 @@ export const SignForm = () => {
                   <ErrorMessage name="username" component="div" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="email"
                     id="email"
                     name="email"
@@ -75,7 +74,7 @@ export const SignForm = () => {
                   <ErrorMessage name="email" component="div" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <InputStyles
+                  <Field
                     type="password"
                     id="password"
                     name="password"

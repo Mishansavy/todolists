@@ -74,7 +74,7 @@ export const LeftDiv = styled.div`
   margin: 0px;
   padding: 0px;
 `;
-export const InputStyles = styled.input`
+export const Field = styled.input`
   &:focus {
     outline: #40a2d8;
   }

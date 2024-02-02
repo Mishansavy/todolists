@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import {
   Main,
@@ -8,7 +9,7 @@ import {
   HomeImg,
   HeadingHeader,
   Container,
-  InputStyles,
+  Field,
   LoginBtn,
   SignupBtn,
 } from "../../Styles/Styles";
@@ -23,7 +24,14 @@ const Login = () => {
   // console.log("🚀 ~ Login ~ errorData:", errorData);
   const [loading, setLoding] = useState(false);
   const navigate = useNavigate();
-
+  //passing the success response
+  const location = useLocation();
+  console.log(location);
+  useEffect(() => {
+    if (location.state && location.state.successMessage) {
+      showToast(location.state.successMessage);
+    }
+  }, [location]);
   const handleLogin = async () => {
     try {
       setLoding(true);
@@ -78,13 +86,13 @@ const Login = () => {
           </HeadingHeader>
           <div>
             {errorData && <p>{errorData}</p>}
-            <InputStyles
+            <Field
               type="text"
               placeholder="username"
               onChange={(e) => setUsername(e.target.value)}
             />
             <br />
-            <InputStyles
+            <Field
               type="password"
               style={{
                 marginTop: "10px",

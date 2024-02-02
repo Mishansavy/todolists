@@ -25,15 +25,18 @@ body {
   padding: 20px;
   border-radius: 12px;
 }
-/* input[type="text"], */
-/* input[type="password"],
+ input[type="text"], 
+ input[type="password"],
 input[type="email"] {
-  padding: 12px;
-  border: 1px solid #ffdfdf;
-} */
-/* input[type="text"]:focus {
-  outline: #f895aa;
-} */
+  padding: 15px 10px;
+  border: 1px solid #0b60b0;
+  margin: 5px 10px;
+  border-radius: 12px;
+} 
+input[type="text"]:focus, input[type="password"],
+input[type="email"] {
+  outline: #40a2d8;
+} 
 .addlist {
   background-color: #aedefc;
   margin: 10px 10px;

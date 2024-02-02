@@ -25,12 +25,12 @@ export default function Todolist() {
 
   //navigations
   const navigate = useNavigate();
-  const Login = () => {
-    navigate("/todolists/login");
-  };
-  const Signup = () => {
-    navigate("/todolist/signup");
-  };
+  // const Login = () => {
+  //   navigate("/todolists/login");
+  // };
+  // const Signup = () => {
+  //   navigate("/todolist/signup");
+  // };
 
   const handlekeypress = (e) => {
     if (e.key === "Enter") {
@@ -69,7 +69,9 @@ export default function Todolist() {
           // console.log(response.data.description);
           // <div>{response.message}</div>;
           axios
-            .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
+            .get(
+              `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
+            )
             .then((response) => setListData(response.data.description))
             .catch((error) => console.log("error fetching todo items", error));
           setActivity("");
@@ -90,7 +92,9 @@ export default function Todolist() {
           if (response) {
             setRemovemsg(response.data.message);
             axios
-              .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
+              .get(
+                `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
+              )
               .then((response) => {
                 setListData(response.data.description);
               })
@@ -129,7 +133,9 @@ export default function Todolist() {
         .patch(`http://192.168.1.161:8000/api/update/${id}/`, updatedItem)
         .then((response) => {
           axios
-            .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
+            .get(
+              `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
+            )
             .then((response) => setListData(response.data.description))
             .catch((error) =>
               console.error("error fetching todo items: ", error)
@@ -176,7 +182,7 @@ export default function Todolist() {
       <div>
         {userData ? (
           <h2 className="header" style={{ color: "red" }}>
-            welcome {userData.user_name} id {userData.id}
+            welcome {userData.user_name}
           </h2>
         ) : (
           <p>No user data available</p>
@@ -192,12 +198,12 @@ export default function Todolist() {
       <button className="addlist" onClick={addActivity}>
         Add List
       </button>
-      <button className="addlist" onClick={Login}>
+      {/* <button className="addlist" onClick={Login}>
         Login
       </button>
       <button className="addlist" onClick={Signup}>
         Signup
-      </button>
+      </button> */}
       <button
         style={{
           backgroundColor: "red",
