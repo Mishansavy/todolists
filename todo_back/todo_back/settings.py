@@ -28,12 +28,20 @@ SECRET_KEY = '6a^3%t(gel(i)v*=w)4wd(kl8=@jphuyxbp!v^g6ns)6p40u-c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 AUTH_USER_MODEL = 'authentication.CustomUser'
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    #   "http://192.168.1.64:8000",  
-    #   "http://192.168.1.64:5173",  
-]
-ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     #   "http://192.168.1.64:8000",  
+#     #   "http://192.168.1.64:5173",  
+# ]
+# ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
+# https://docs.djangoproject.com/en/3.0/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+CORS_ALLOWED_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -47,10 +55,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'backend',
+    'todo_back.backend',
     'corsheaders',
     'rest_framework',
-    'authentication',
+    'todo_back.authentication',
     'rest_framework.authtoken'
 
 ]
