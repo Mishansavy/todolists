@@ -34,6 +34,10 @@ export const HomeImg = styled.img`
   border-radius: 40px;
   object-fit: contain;
 `;
+export const RemoImg = styled.img`
+  width: 30%;
+  height: 10vh;
+`;
 export const RightDiv = styled.div`
   width: 47%;
   display: flex;

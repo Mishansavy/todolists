@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-
+import Logo from "../assets/Img/mainLogo-removebg.png";
 import "./todolist.css";
 import axios from "axios";
 import moment from "moment";
+//ui style imports
+import { RemoImg } from "../Styles/Styles";
 import { useNavigate, useLocation } from "react-router";
 export default function Todolist() {
   const [activity, setActivity] = useState("");
@@ -38,11 +40,12 @@ export default function Todolist() {
     }
   };
   // logout
+  //login response
 
   const Logout = async () => {
     try {
       const logoutResponse = await axios.get(
-        "http://192.168.1.161:8000/accounts/logout/",
+        "http://192.168.1.64:8000/accounts/logout/",
         { message }
       );
       if (logoutResponse.data.message) {
@@ -58,7 +61,7 @@ export default function Todolist() {
   function addActivity() {
     if (activity.trim() !== "") {
       axios
-        .post("http://192.168.1.161:8000/api/todoitems/", {
+        .post("http://192.168.1.64:8000/api/todoitems/", {
           description: activity,
           created_by: userData.user_id,
         })
@@ -69,9 +72,7 @@ export default function Todolist() {
           // console.log(response.data.description);
           // <div>{response.message}</div>;
           axios
-            .get(
-              `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
-            )
+            .get(`http://192.168.1.64:8000/api/todoitems/${userData?.user_id}/`)
             .then((response) => setListData(response.data.description))
             .catch((error) => console.log("error fetching todo items", error));
           setActivity("");
@@ -87,13 +88,13 @@ export default function Todolist() {
   function removeActivity(i) {
     try {
       axios
-        .delete(`http://192.168.1.161:8000/api/delete/${i}/`)
+        .delete(`http://192.168.1.64:8000/api/delete/${i}/`)
         .then((response) => {
           if (response) {
             setRemovemsg(response.data.message);
             axios
               .get(
-                `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
+                `http://192.168.1.64:8000:/api/todoitems/${userData?.user_id}/`
               )
               .then((response) => {
                 setListData(response.data.description);
@@ -112,7 +113,7 @@ export default function Todolist() {
   }
 
   function showToast(message) {
-    toast.success(message, { autoClose: 2500 }); // Auto-close the toast after 1 second
+    toast.success(message, { autoClose: 2500 });
   }
   //edit
   function editActivity(i) {
@@ -130,11 +131,11 @@ export default function Todolist() {
 
       const updatedItem = { description: editedText };
       axios
-        .patch(`http://192.168.1.161:8000/api/update/${id}/`, updatedItem)
+        .patch(`http://192.168.1.64:8000/api/update/${id}/`, updatedItem)
         .then((response) => {
           axios
             .get(
-              `http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`
+              `http://192.168.1.64:8000:/api/todoitems/${userData?.user_id}/`
             )
             .then((response) => setListData(response.data.description))
             .catch((error) =>
@@ -161,7 +162,7 @@ export default function Todolist() {
       // fetch and set user-specific data based on user Id
       axios
         .get(
-          `http://192.168.1.161:8000/accounts/register/user/${userData.user_id}/`
+          `http://192.168.1.64:8000:/accounts/register/user/${userData.user_id}/`
         )
         .then((response) => {
           setUserDescription(response.data.description);
@@ -170,53 +171,51 @@ export default function Todolist() {
     }
     // fetch and set list data
     axios
-      .get(`http://192.168.1.161:8000/api/todoitems/${userData?.user_id}/`)
+      .get(`http://192.168.1.64:8000/api/todoitems/${userData?.user_id}/`)
       .then((response) => setListData(response.data.description))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData, deletedMsg]);
 
   return (
     <div className="container">
-      <div className="header">To-Do List</div>
-      {/* login user data  */}
-      <div>
-        {userData ? (
-          <h2 className="header" style={{ color: "red" }}>
-            welcome {userData.user_name}
-          </h2>
-        ) : (
-          <p>No user data available</p>
-        )}
+      <div className="headPart">
+        <RemoImg src={Logo} alt="" />
+        {/* login user data  */}
+        <span>
+          {userData ? (
+            <h2 className="header" style={{ color: "#0B60B0" }}>
+              welcome {userData.user_name}
+            </h2>
+          ) : (
+            <p>No user data available</p>
+          )}
+        </span>
       </div>
-      <input
-        type="text"
-        placeholder="Add List"
-        value={activity}
-        onChange={(e) => setActivity(e.target.value)}
-        onKeyPress={handlekeypress}
-      />
-      <button className="addlist" onClick={addActivity}>
-        Add List
-      </button>
-      {/* <button className="addlist" onClick={Login}>
-        Login
-      </button>
-      <button className="addlist" onClick={Signup}>
-        Signup
-      </button> */}
-      <button
-        style={{
-          backgroundColor: "red",
-          color: "#fff",
-          border: "0px solid red",
-          margin: "10px 10px",
-          padding: "9px 10px",
-          borderRadius: "11px",
-        }}
-        onClick={() => Logout()}
-      >
-        Logout
-      </button>
+      <div>
+        <input
+          type="text"
+          placeholder="Add List"
+          value={activity}
+          onChange={(e) => setActivity(e.target.value)}
+          onKeyPress={handlekeypress}
+        />
+        <button className="addlist" onClick={addActivity}>
+          Add List
+        </button>
+        <button
+          style={{
+            backgroundColor: "red",
+            color: "#fff",
+            border: "0px solid red",
+            margin: "10px 10px",
+            padding: "9px 10px",
+            borderRadius: "11px",
+          }}
+          onClick={() => Logout()}
+        >
+          Logout
+        </button>
+      </div>
       <div className="listHeading">Your List</div>
       {Array.isArray(listData) && listData?.length > 0 ? (
         listData.map((item) => (

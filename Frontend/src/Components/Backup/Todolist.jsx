@@ -119,9 +119,7 @@ export default function Todolist() {
 
       // fetch and set user-specific data based on user Id
       axios
-        .get(
-          `http://192.168.1.161/accounts/register/user/${userData.user_id}/`
-        )
+        .get(`http://192.168.1.161/accounts/register/user/${userData.user_id}/`)
         .then((response) => {
           setUserDescription(response.data.description);
         })
@@ -136,7 +134,7 @@ export default function Todolist() {
 
   return (
     <div className="container">
-      <div className="header">To-Do List</div>
+      <div className="header">Remo</div>
       {/* testing the login user data  */}
       <div>
         {userData ? (
