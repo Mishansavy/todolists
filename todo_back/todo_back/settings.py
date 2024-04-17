@@ -55,10 +55,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo_back.backend',
+    'backend',
     'corsheaders',
     'rest_framework',
-    'todo_back.authentication',
+    'Authentication',
     'rest_framework.authtoken'
 
 ]
