@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password
-from authentication.models import CustomUser
+from Authentication.models import CustomUser
 # Create your models here.
 # todolist/models.py
 
