@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 import SignForm from "../../Components/Form/SignForm";
 import { ToastContainer, toast } from "react-toastify";
+import api from "../../api/api";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First name is required"),
@@ -18,10 +18,20 @@ const validationSchema = Yup.object({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
-function showToast(message) {
-  toast.success(message, { autoClose: 2500 });
-}
+import { useNavigate, useLocation } from "react-router-dom";
+
 export const Signup = () => {
+  const showToast = (message) => {
+    toast.success(message, { autoClose: 2500 });
+  };
+  const location = useLocation();
+
+  console.log(location);
+  useEffect(() => {
+    if (location.state && location.state.successMessage) {
+      showToast(location.state.successMessage);
+    }
+  }, [location]);
   const navigate = useNavigate();
   const [successMessge, setSuccessMessage] = useState("");
   return (
@@ -38,9 +48,8 @@ export const Signup = () => {
         validationSchema={validationSchema}
         validate={() => ({})}
         onSubmit={(values, { setSubmitting }) => {
-          // alert(JSON.stringify(values, null, 2));
           axios
-            .post("http://192.168.1.161:8000/accounts/register/user/", values)
+            .post("http://192.168.1.64:8000/accounts/register/user/", values)
             .then((response) => {
               console.log("API Response", response.data);
               console.log("form values", values);
@@ -49,6 +58,7 @@ export const Signup = () => {
                 state: { successMessage: response.data.message },
               });
             })
+
             .catch((error) => {
               console.log("errors", error);
               showToast(error.response?.data.message || "An error occurred");
@@ -58,8 +68,7 @@ export const Signup = () => {
       >
         <SignForm />
       </Formik>
-
-      <ToastContainer position="bottom-left" closeOnClick pauseOnHover />
+      <ToastContainer position="center" closeOnClick pauseOnHover />
     </>
   );
 };
