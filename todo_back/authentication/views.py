@@ -80,6 +80,7 @@ class UserCreate(APIView):
 class UserAPIIDView(APIView):
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
+
     def get_object(self, id):
         try:
             user = CustomUser.objects.get(id=id)
@@ -126,6 +127,8 @@ class UserAPIIDView(APIView):
 @permission_classes([AllowAny])
 class UserLogin(APIView):
     # authentication_classes = ['JWTAuthentication']
+    print("is UserLogin class is also calling for login?")
+
     def post(self, request):
         response = CustomResponse()
         username = request.data.get('username')

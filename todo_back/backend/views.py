@@ -78,7 +78,7 @@ class todoitemsDelete(APIView):
         return Response(response.successResponse(200, "User List", serializer.data), status=status.HTTP_200_OK)
 
     def delete(self, request, id):
-        print("I am here")
+        # print("I am here")
         response = CustomResponse()
         instance = self.get_object(id)
         if not instance:
@@ -233,6 +233,7 @@ class UserLogin(APIView):
                 "user_name" : request.user.username,
             }
             print(data)
+            
             return Response({"result": "logged in", "user_data": data}, status=status.HTTP_200_OK)
         else:
             return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
