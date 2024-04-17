@@ -9,11 +9,13 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import BasePermission, AllowAny
+from rest_framework.permissions import BasePermission, AllowAny, IsAuthenticated
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
-from authentication.serializers import *
+from rest_framework.decorators import permission_classes
 
+from authentication.serializers import *
+from django.http import JsonResponse
 User = get_user_model()
 # backend/views.py
 from rest_framework import viewsets
@@ -23,6 +25,7 @@ from .models import TodoItem
 # class TodoItemViewSet(viewsets.ModelViewSet):
 #     queryset = TodoItem.objects.all()
 #     serializer_class = TodoItemSerializer
+@permission_classes([AllowAny])
 class TodoItems(APIView) :
     def get_object(self, id):
         try:
@@ -75,7 +78,7 @@ class todoitemsDelete(APIView):
         return Response(response.successResponse(200, "User List", serializer.data), status=status.HTTP_200_OK)
 
     def delete(self, request, id):
-        print("I am here")
+        # print("I am here")
         response = CustomResponse()
         instance = self.get_object(id)
         if not instance:
@@ -84,23 +87,29 @@ class todoitemsDelete(APIView):
         instance.delete()
         return Response(response.successResponse(200, "Todo has been deleted successufully"), status=status.HTTP_200_OK)
     
-    def put (self, request, id):
+class todoitemsUpdate(APIView):
+    def get_object(self, id):
+        try:
+            todo_item = TodoItem.objects.get(id=id)
+            return todo_item
+        except TodoItem.DoesNotExist:
+            return None
+        
+    def patch (self, request, id):
         response = CustomResponse()
-        instance = self.get_object(id)
+        instance = self.get_object(id=id)
         if not instance:
             return Response(response.errorResponse(404, "Todo Item not found"), status=status.HTTP_404_NOT_FOUND)
         data = {
-            "created_by": request.data.get("created_by"),
+            "created_by_id": request.user.id,
             "description": request.data.get("description")
         }
-
-        serializer = TodoItemSerializer(instance, data=data)
+        serializer = TodoItemSerializerUpdate(instance=instance, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(response.successResponse(200, "Todo has  been updated succesfully", serializer.data), status=status.HTTP_200_OK)
+            return JsonResponse(response.successResponse(200, "Todo has  been updated succesfully", serializer.data), status=status.HTTP_200_OK)
         
-        return Response(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
-
+        return JsonResponse(response.errorResponse(400, "Something went wrong", serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 class CustomResponse():
     def successResponseToken(self, code, refresh, access, msg, data=dict()):
@@ -112,11 +121,11 @@ class CustomResponse():
         }
         return context
     
-    def successResponse(self, code, msg, navigation=dict()):
+    def successResponse(self, code, msg, description=dict()):
         context = {
             "status_code": code,
             "message": msg,
-            "navigation": navigation,
+            "description": description,
             "error": []
         }
         return context
@@ -194,7 +203,9 @@ class UserAPIIDView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(response.successResponse(200, "User Details Updated Successfully", serializer.data), status=status.HTTP_200_OK)
-        return Response(response.errorResponse(400, "Bad Request"), status=status.HTTP_400_BAD_REQUEST)
+        # Provide more detailed error messages
+        error_details = serializer.errors
+        return Response(response.errorResponse(400, "Bad Request", errors=error_details), status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id):
         user = request.user
@@ -222,6 +233,7 @@ class UserLogin(APIView):
                 "user_name" : request.user.username,
             }
             print(data)
+            
             return Response({"result": "logged in", "user_data": data}, status=status.HTTP_200_OK)
         else:
             return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)

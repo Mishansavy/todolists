@@ -8,6 +8,10 @@ class TodoItemSerializer(serializers.ModelSerializer):
         model = TodoItem
         fields = ['id',  'description', 'created_by', 'created_at']
 
+class TodoItemSerializerUpdate(serializers.ModelSerializer):
+    class Meta:
+        model=TodoItem
+        fields=['created_by' ,'description']
 
 
     

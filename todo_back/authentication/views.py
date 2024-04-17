@@ -6,12 +6,12 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate,login, logout
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
+# from rest_framework import authentication
 from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
 from authentication.serializers import *
+from rest_framework.decorators import permission_classes
 
 User = get_user_model()
 
@@ -52,6 +52,7 @@ class CustomResponse():
         }
         return res
 
+@permission_classes([AllowAny])
 class UserCreate(APIView):
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
@@ -79,6 +80,7 @@ class UserCreate(APIView):
 class UserAPIIDView(APIView):
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
+
     def get_object(self, id):
         try:
             user = CustomUser.objects.get(id=id)
@@ -121,8 +123,12 @@ class UserAPIIDView(APIView):
             return Response(response.errorResponse(404, "Nothing Found"), status=status.HTTP_404_NOT_FOUND)
         instance.delete()
         return Response(response.successResponse(200, "User Deleted Successfully"),status=status.HTTP_200_OK)
-    
+
+@permission_classes([AllowAny])
 class UserLogin(APIView):
+    # authentication_classes = ['JWTAuthentication']
+    print("is UserLogin class is also calling for login?")
+
     def post(self, request):
         response = CustomResponse()
         username = request.data.get('username')
@@ -151,6 +157,7 @@ class UserLogin(APIView):
         # else:
         #     return Response(response.errorResponse(400, "Username or Password is incorrect"), status=status.HTTP_400_BAD_REQUEST)
          
+@permission_classes([AllowAny])
 class LogOut(APIView):
     def get(self, request):
         print("user: ", request.user)
