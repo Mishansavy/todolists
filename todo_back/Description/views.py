@@ -14,7 +14,7 @@ from rest_framework.permissions import BasePermission, AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import permission_classes
 
-from Authentication.serializers import *
+from UserWork.serializers import *
 from django.http import JsonResponse
 User = get_user_model()
 # backend/views.py

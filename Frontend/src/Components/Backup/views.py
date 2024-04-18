@@ -11,7 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
-from Authentication.serializers import *
+from UserWork.serializers import *
 
 User = get_user_model()
 
