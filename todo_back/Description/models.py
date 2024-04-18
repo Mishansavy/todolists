@@ -1,6 +1,6 @@
 from django.db import models
-# from todo_back.UserWork.models import CustomUser
 from UserWork.models import CustomUser
+# D:\Personal Project\todolists\todo_back\UserWork\models.py
 # Create your models here.
 # todolist/models.py
 
