@@ -1,6 +1,6 @@
 from django.db import models
 # from todo_back.UserWork.models import CustomUser
-from ..UserWork.models import CustomUser
+from UserWork.models import CustomUser
 # Create your models here.
 # todolist/models.py
 
