@@ -5,16 +5,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import BasePermission, AllowAny, IsAuthenticated
-# from .renderers import UserRenderer
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import  AllowAny
 from rest_framework.decorators import permission_classes
 
-from UserWork.serializers import *
+from  ..UserWork.serializers import *
+from ..UserWork.models import CustomUser
 from django.http import JsonResponse
 User = get_user_model()
 # backend/views.py

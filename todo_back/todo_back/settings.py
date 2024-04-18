@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '6a^3%t(gel(i)v*=w)4wd(kl8=@jphuyxbp!v^g6ns)6p40u-c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 AUTH_USER_MODEL = 'UserWork.CustomUser'
 
 # CORS_ALLOWED_ORIGINS = [
@@ -37,7 +37,7 @@ AUTH_USER_MODEL = 'UserWork.CustomUser'
 # ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
 
 #for production
-ALLOWED_HOSTS = ['https://todoapp-backend-sad2.onrender.com/', 'localhost']
+ALLOWED_HOSTS = ['todoapp-backend-sad2.onrender.com', 'localhost','127.0.0.1']
 
 CORS_ALLOWED_ORIGINS = True
 
