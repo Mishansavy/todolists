@@ -37,7 +37,7 @@ AUTH_USER_MODEL = 'UserWork.CustomUser'
 # ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
 
 #for production
-ALLOWED_HOSTS = ['https://todoapp-backend-sad2.onrender.com/']
+ALLOWED_HOSTS = ['https://todoapp-backend-sad2.onrender.com/', 'localhost']
 
 CORS_ALLOWED_ORIGINS = True
 
