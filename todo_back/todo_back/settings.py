@@ -83,7 +83,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'todo_back.urls'
+ROOT_URLCONF = 'todo_back.todo_back.urls'
 
 TEMPLATES = [
     {

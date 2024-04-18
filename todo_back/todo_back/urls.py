@@ -1,13 +1,3 @@
-# from django.contrib import admin
-# from django.urls import path, include
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('api/', include('backend.urls')),
-#     path('accounts/', include('authentication.urls')),
-
-# ]
-# from chatgpt 
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
@@ -22,8 +12,8 @@ router = DefaultRouter()
 urlpatterns = [
     # Include the router's URL patterns
     path('admin/', admin.site.urls),
-    path('api/', include('backend.urls')),
-    path('accounts/', include('authentication.urls')),
+    path('api/', include('Description.urls')),
+    path('accounts/', include('UserWork.urls')),
       
 ]
 
