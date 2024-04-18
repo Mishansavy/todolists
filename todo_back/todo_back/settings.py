@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'todo_back.Description',
     'corsheaders',
     'rest_framework',
-    'UserWork',
+    'todo_back.UserWork',
     'rest_framework.authtoken'
 
 ]
