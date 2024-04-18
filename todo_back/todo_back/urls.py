@@ -12,9 +12,10 @@ router = DefaultRouter()
 urlpatterns = [
     # Include the router's URL patterns
     path('admin/', admin.site.urls),
-    path('api/', include('todo_back.Description.urls')),
-    path('accounts/', include('todo_back.UserWork.urls')),
+    path('api/', include('Description.urls')),
+    path('accounts/', include('UserWork.urls')),
       
 ]
 
 urlpatterns += staticfiles_urlpatterns()
+

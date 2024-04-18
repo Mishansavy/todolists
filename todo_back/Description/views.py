@@ -1,6 +1,6 @@
 # todolist/views.py
 from django.contrib.auth.models import User
-from .serializers import *
+from serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,8 +15,8 @@ from django.http import JsonResponse
 User = get_user_model()
 # backend/views.py
 from rest_framework import viewsets
-from .serializers import TodoItemSerializer
-from .models import TodoItem
+from serializers import TodoItemSerializer
+from models import TodoItem
 
 # class TodoItemViewSet(viewsets.ModelViewSet):
 #     queryset = TodoItem.objects.all()
