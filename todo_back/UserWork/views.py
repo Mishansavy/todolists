@@ -10,6 +10,7 @@ from rest_framework.permissions import  AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
 from .serializers import UserRegistrationSerializer
+from .models import CustomUser
 from rest_framework.decorators import permission_classes
 
 User = get_user_model()
