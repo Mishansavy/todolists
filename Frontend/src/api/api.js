@@ -1,4 +1,4 @@
-export const BASE_USER_URL  = 'https://todoapp-backend-sad2.onrender.com/';
+export const BASE_USER_URL  = 'https://todoapp-backend-sad2.onrender.com';
 
 export const userendpoints = {
     login: '/accounts/login/',
