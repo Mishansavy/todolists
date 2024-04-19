@@ -4,7 +4,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import SignForm from "../../Components/Form/SignForm";
 import { ToastContainer, toast } from "react-toastify";
-import api from "../../api/api";
+// import api from "../../api/api";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First name is required"),

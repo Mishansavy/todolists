@@ -27,7 +27,7 @@ SECRET_KEY = '6a^3%t(gel(i)v*=w)4wd(kl8=@jphuyxbp!v^g6ns)6p40u-c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-AUTH_USER_MODEL = 'todo_back.UserWork.CustomUser'
+AUTH_USER_MODEL = 'UserWork.CustomUser'
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:5173",
