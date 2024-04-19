@@ -1,7 +1,6 @@
 from django.db import models
-from .models import CustomUser
-# D:\Personal Project\todolists\todo_back\UserWork\models.py
-# Create your models here.
+CustomUser = "UserWork.CustomUser"
+
 # todolist/models.py
 
 class TodoItem(models.Model):
