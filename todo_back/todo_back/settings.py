@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserWork',
-    'todo_back.Description',
+    'Description',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken'
