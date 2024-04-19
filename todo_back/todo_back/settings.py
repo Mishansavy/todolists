@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+import secrets
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,17 +23,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dh=6$vn7-d)*ltwnr@)aie^s+&kc^4w1c=ypq*07xgni(ge8&!'
+SECRET_KEY = '6a^3%t(gel(i)v*=w)4wd(kl8=@jphuyxbp!v^g6ns)6p40u-c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-AUTH_USER_MODEL = 'authentication.CustomUser'
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    #   "http://192.168.1.64:8000",  
-    #   "http://192.168.1.64:5173",  
-]
-ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
+AUTH_USER_MODEL = 'UserWork.CustomUser'
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     #   "http://192.168.1.64:8000",  
+#     #   "http://192.168.1.64:5173",  
+# ]
+# ALLOWED_HOSTS = ['192.168.1.64','192.168.1.64', 'http://192.168.1.64:8000:5173', '127.0.0.1', 'localhost', '192.168.1.66']
+
+#for production
+ALLOWED_HOSTS = ['todoapp-backend-sad2.onrender.com', 'localhost','127.0.0.1']
+
+CORS_ALLOWED_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -46,10 +53,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'backend',
+    'todo_back.UserWork',
+    'todo_back.Description',
     'corsheaders',
     'rest_framework',
-    'authentication',
     'rest_framework.authtoken'
 
 ]
@@ -73,7 +80,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'todo_back.urls'
+ROOT_URLCONF = 'todo_back.todo_back.urls'
 
 TEMPLATES = [
     {

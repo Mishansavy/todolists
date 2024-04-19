@@ -49,7 +49,10 @@ export const Signup = () => {
         validate={() => ({})}
         onSubmit={(values, { setSubmitting }) => {
           axios
-            .post("http://192.168.1.64:8000/accounts/register/user/", values)
+            .post(
+              "https://todoapp-backend-sad2.onrender.com/accounts/register/user/",
+              values
+            )
             .then((response) => {
               console.log("API Response", response.data);
               console.log("form values", values);

@@ -1,16 +1,16 @@
 from django.contrib.auth.models import User
-from .serializers import *
+from .serializers import UserRegistrationSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate,login, logout
 # from rest_framework import authentication
-from rest_framework.permissions import IsAuthenticated, BasePermission, AllowAny
+from rest_framework.permissions import  AllowAny
 # from .renderers import UserRenderer
 from rest_framework.exceptions import PermissionDenied
-from authentication.serializers import *
+from .serializers import UserRegistrationSerializer
+from .models import CustomUser
 from rest_framework.decorators import permission_classes
 
 User = get_user_model()

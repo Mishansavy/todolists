@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password
-from authentication.models import CustomUser
-# Create your models here.
+# CustomUser = "UserWork.CustomUser"
+from ..UserWork.models import CustomUser
+
+
 # todolist/models.py
 
 class TodoItem(models.Model):
