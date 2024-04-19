@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo_back.UserWork',
+    'UserWork',
     'todo_back.Description',
     'corsheaders',
     'rest_framework',
