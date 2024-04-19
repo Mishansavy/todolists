@@ -1,6 +1,6 @@
 # todolist/urls.py
 from rest_framework import routers
-from .views import *
+from .views import TodoItems,todoitemsDelete,todoitemsUpdate
 from django.urls import path
 router = routers.DefaultRouter()
 # router.register(r'todoitems', TodoItemViewSet)

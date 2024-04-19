@@ -9,14 +9,14 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import  AllowAny
 from rest_framework.decorators import permission_classes
 
-from  ..UserWork.serializers import *
+from  ..UserWork.serializers import UserRegistrationSerializer
 from ..UserWork.models import CustomUser
 from django.http import JsonResponse
 User = get_user_model()
 # backend/views.py
 from rest_framework import viewsets
-from serializers import TodoItemSerializer
-from models import TodoItem
+from .serializers import TodoItemSerializer
+from .models import TodoItem
 
 # class TodoItemViewSet(viewsets.ModelViewSet):
 #     queryset = TodoItem.objects.all()
