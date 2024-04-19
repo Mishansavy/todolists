@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '6a^3%t(gel(i)v*=w)4wd(kl8=@jphuyxbp!v^g6ns)6p40u-c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 AUTH_USER_MODEL = 'UserWork.CustomUser'
 
 # CORS_ALLOWED_ORIGINS = [

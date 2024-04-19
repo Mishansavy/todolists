@@ -38,7 +38,7 @@ const Login = () => {
     try {
       setLoding(true);
       const response = await axios.post(
-        "http://192.168.1.64:8000/accounts/login/",
+        "https://todoapp-backend-sad2.onrender.com/accounts/login/",
         { username, password }
       );
       if (response.data.result) {
