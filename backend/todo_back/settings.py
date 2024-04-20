@@ -39,7 +39,7 @@ AUTH_USER_MODEL = 'UserWork.CustomUser'
 #for production
 ALLOWED_HOSTS = ['todoapp-backend-sad2.onrender.com', 'localhost','127.0.0.1']
 
-CORS_ALLOWED_ORIGINS = True
+CORS_ALLOWED_ORIGINS = ['https://todoapp-backend-sad2.onrender.com', 'http://localhost:5173']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo_back.UserWork',
-    'todo_back.Description',
+    'UserWork',
+    'Description',
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken'
@@ -80,7 +80,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'todo_back.todo_back.urls'
+ROOT_URLCONF = 'todo_back.urls'
 
 TEMPLATES = [
     {

@@ -1,7 +1,6 @@
 from django.db import models
-# CustomUser = "UserWork.CustomUser"
-from ..UserWork.models import CustomUser
-
+# from ..UserWork.models import CustomUser
+from UserWork.models import CustomUser
 
 # todolist/models.py
 

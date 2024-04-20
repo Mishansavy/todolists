@@ -11,7 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'todo_back.todo_back.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'todo_back.settings')
 
 application = get_wsgi_application()
 # D:\Personal Project\todolists\todo_back\todo_back\wsgi.py

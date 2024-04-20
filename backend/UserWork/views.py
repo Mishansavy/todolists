@@ -127,7 +127,7 @@ class UserAPIIDView(APIView):
 @permission_classes([AllowAny])
 class UserLogin(APIView):
     # authentication_classes = ['JWTAuthentication']
-    print("is UserLogin class is also calling for login?")
+    # print("is UserLogin class is also calling for login?")
 
     def post(self, request):
         response = CustomResponse()
