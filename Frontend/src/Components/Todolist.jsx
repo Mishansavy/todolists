@@ -45,7 +45,7 @@ export default function Todolist() {
   const Logout = async () => {
     try {
       const logoutResponse = await axios.get(
-        "http://192.168.1.64:8000/accounts/logout/",
+        "https://todoapp-backend-sad2.onrender.com/accounts/logout/",
         { message }
       );
       if (logoutResponse.data.message) {
@@ -61,7 +61,7 @@ export default function Todolist() {
   function addActivity() {
     if (activity.trim() !== "") {
       axios
-        .post("http://192.168.1.64:8000/api/todoitems/", {
+        .post("https://todoapp-backend-sad2.onrender.com/api/todoitems/", {
           description: activity,
           created_by: userData.user_id,
         })
@@ -72,7 +72,9 @@ export default function Todolist() {
           // console.log(response.data.description);
           // <div>{response.message}</div>;
           axios
-            .get(`http://192.168.1.64:8000/api/todoitems/${userData?.user_id}/`)
+            .get(
+              `https://todoapp-backend-sad2.onrender.com/api/todoitems/${userData?.user_id}/`
+            )
             .then((response) => setListData(response.data.description))
             .catch((error) => console.log("error fetching todo items", error));
           setActivity("");
@@ -88,13 +90,13 @@ export default function Todolist() {
   function removeActivity(i) {
     try {
       axios
-        .delete(`http://192.168.1.64:8000/api/delete/${i}/`)
+        .delete(`https://todoapp-backend-sad2.onrender.com/api/delete/${i}/`)
         .then((response) => {
           if (response) {
             setRemovemsg(response.data.message);
             axios
               .get(
-                `http://192.168.1.64:8000:/api/todoitems/${userData?.user_id}/`
+                `https://todoapp-backend-sad2.onrender.com:/api/todoitems/${userData?.user_id}/`
               )
               .then((response) => {
                 setListData(response.data.description);
@@ -131,11 +133,14 @@ export default function Todolist() {
 
       const updatedItem = { description: editedText };
       axios
-        .patch(`http://192.168.1.64:8000/api/update/${id}/`, updatedItem)
+        .patch(
+          `https://todoapp-backend-sad2.onrender.com/api/update/${id}/`,
+          updatedItem
+        )
         .then((response) => {
           axios
             .get(
-              `http://192.168.1.64:8000:/api/todoitems/${userData?.user_id}/`
+              `https://todoapp-backend-sad2.onrender.com:/api/todoitems/${userData?.user_id}/`
             )
             .then((response) => setListData(response.data.description))
             .catch((error) =>
@@ -162,7 +167,7 @@ export default function Todolist() {
       // fetch and set user-specific data based on user Id
       axios
         .get(
-          `http://192.168.1.64:8000:/accounts/register/user/${userData.user_id}/`
+          `https://todoapp-backend-sad2.onrender.com:/accounts/register/user/${userData.user_id}/`
         )
         .then((response) => {
           setUserDescription(response.data.description);
@@ -171,7 +176,9 @@ export default function Todolist() {
     }
     // fetch and set list data
     axios
-      .get(`http://192.168.1.64:8000/api/todoitems/${userData?.user_id}/`)
+      .get(
+        `https://todoapp-backend-sad2.onrender.com/api/todoitems/${userData?.user_id}/`
+      )
       .then((response) => setListData(response.data.description))
       .catch((error) => console.error("error fetching todo items: ", error));
   }, [userData, deletedMsg]);

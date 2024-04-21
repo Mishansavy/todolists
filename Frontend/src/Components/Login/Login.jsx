@@ -38,11 +38,10 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       setLoding(true);
-      const response = await axios.post(
-        // "https://todoapp-backend-sad2.onrender.com/accounts/login/",
-        BASE_USER_URL + userendpoints.login,
-        { username, password }
-      );
+      const response = await axios.post(BASE_USER_URL + userendpoints.login, {
+        username,
+        password,
+      });
       if (response.data.result) {
         setIsLoggedIn(true);
         console.log("Login successful");
@@ -79,8 +78,8 @@ const Login = () => {
       <LeftDiv>
         <HomeImg src={MainLogo} alt="" />
       </LeftDiv>
-      <RightDiv style={{ justifyContent: "start" }}>
-        <Container style={{ justifyContent: "center" }}>
+      <RightDiv>
+        <Container className="check">
           <HeadingHeader style={{ color: "#0B60B0" }}>
             Login to Remo
           </HeadingHeader>
